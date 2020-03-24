@@ -124,7 +124,7 @@ public class Attuatore {
             return;
         }
         for (ModalitaOperativa mod : this.getCategoria().getModalita()) {
-            if(mod.getNome().equals(nuovaModalita)) {
+            if(mod.getValore().equals(nuovaModalita)) {
                 this.modalitaAttuale = nuovaModalita;
 
 
@@ -156,7 +156,7 @@ public class Attuatore {
             System.out.println("Sei già in questa modalità");
         }
         for (ModalitaOperativa mod : this.getCategoria().getModalita()) {
-            if(mod.getNome().equals(nuovaModalita)) {
+            if(mod.getValore().equals(nuovaModalita)) {
                 this.modalitaAttuale = nuovaModalita;
 
                 HashMap<String, Integer> nuoviParam = (HashMap<String, Integer>) mod.getParametri().clone();

@@ -102,15 +102,25 @@ public class Sensore {
             rilevazioni.set(rilevazioni.indexOf(info1),info2);
     }
 
+    public Informazione getInformazione(String nome) {
+        for (Informazione info : this.rilevazioni) {
+            if (info.getNome().equals(nome))
+                return info;
+        }
+
+        return null;
+    }
+
     /**
      *
      * @return una rappresentazione descrittiva in formato testuale di un sensore
      */
     @Override
+    //TODO: Secondo me si puo togliere quel if sulla mod
     public String toString() {
         String visualizza ="Nome sensore: " + this.getNome() + ", rilevazioni effettuate:\n";
         for(Informazione info : this.getRilevazioni()) {
-            if(!info.getNome().equals("STATO"))
+            if(!info.getNome().equals("Modalità Operativa"))
                 visualizza += info.getNome() + info.getValore();
         }
         return  visualizza;

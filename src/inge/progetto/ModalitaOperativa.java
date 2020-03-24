@@ -18,7 +18,11 @@ import java.util.HashMap;
 public class ModalitaOperativa extends Informazione
                                 implements Serializable {
 
+    //TODO: Aggiungere magari una stringa per il valore in quanto ora serve!!!
+    //    : Tocca magari aggiungere un metodo getValore e avere come nome della modalità op "MODALITA OPERATIVA" e magari avere anche
+    //      toString piu generalizzato
 
+    private String valore;
     /**
      * Insieme di parametri di una modalit&agrave; operativa.
      * Ciascun parametro &egrave; dotato di nome, diverso da quello degli altri parametri della medesima modalit&agrave; e assume un valore numerico
@@ -27,10 +31,12 @@ public class ModalitaOperativa extends Informazione
 
     /**Costruttore della classe
      * La modalit&agrave; operativa &egrave; non parametrica completamente specificata dal manutentore con nome
-     * @param nome nome della modalit&agrave; operativa
+     * @param valore nome della modalit&agrave; operativa
      */
-    public ModalitaOperativa(String nome) {
-        super(nome);
+    public ModalitaOperativa(String valore) {
+        super("Modalita Operativa");
+        this.valore = valore;
+        super.setTipo("NN");
         this.parametri = new HashMap<>();
     }
 
@@ -42,6 +48,7 @@ public class ModalitaOperativa extends Informazione
     public ModalitaOperativa(String nome, HashMap<String, Integer> parametri) {
         super(nome);
         this.parametri = parametri;
+        super.setTipo("NN");
     }
 
     /** Permette di modificare un parametro della modalità operativa
@@ -63,13 +70,18 @@ public class ModalitaOperativa extends Informazione
         System.out.println("*** Il parametro è stato impostato correttamente al nuovo valore ***");
     }
 
+    @Override
+    public String getValore() {
+        return this.valore;
+    }
+
     /**
      * Fornisce una rappresentazione testuale che descrive brevemente l'istanza
      * @return stampa il toString della modalità operativa
      */
     @Override
     public String toString() {
-        StringBuilder out = new StringBuilder("Modalita Operativa: " + this.getNome());
+        StringBuilder out = new StringBuilder("Modalita Operativa: " + this.getValore());
         if (!this.parametri.isEmpty()) {
             out.append("\n### Parametri = ");
             for (String key : parametri.keySet()) {

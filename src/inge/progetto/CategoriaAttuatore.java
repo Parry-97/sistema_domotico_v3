@@ -72,7 +72,7 @@ public class CategoriaAttuatore implements Serializable {
     public void aggiungiModalitaOperativa(ModalitaOperativa mod) {
         if(!modalita.isEmpty()) {
             for (ModalitaOperativa m : modalita) {
-                if(m.getNome().equals(mod.getNome())) {
+                if(m.getValore().equals(mod.getValore())) {
                     System.out.println("!!! Modalità Operativa già presente per questa categoria !!!");
                     return;
                 }
@@ -90,7 +90,7 @@ public class CategoriaAttuatore implements Serializable {
         String visualizza = "Nome Categoria: " + this.getNome() + ", testo libero: " + this.getTestoLibero() + ", lista modalità operative:\n";
 
         for (ModalitaOperativa lista: modalita) {
-            visualizza +=  lista.getNome() + "\n";
+            visualizza +=  lista.getValore() + "\n";
         }
 
         return visualizza;

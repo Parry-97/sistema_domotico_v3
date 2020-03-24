@@ -5,6 +5,7 @@ import it.unibs.fp.mylib.*;
 import java.io.*;
 import java.util.*;
 
+
 /**
  * Principale punto d'avvio e funzionamento del sistema domotico. Svolge un ruolo di interfacciamento tra l'utente e la logica interna
  * del sistema, permettendo all'utente di interagire con l'unita immobiliare e le sue sottounit&agrave;. Vi sono 2 tipi di utente: manutentore e
@@ -32,16 +33,97 @@ public class Main {
 
     public static void main(String[] args) {
 
-        UnitaImmobiliare unitaImmobiliare = new UnitaImmobiliare();
+
+
+        /*UnitaImmobiliare unitaImmobiliare = new UnitaImmobiliare();
         ArrayList<UnitaImmobiliare> listaUnitaImmobiliari = new ArrayList<>();
+        */
+
+        //TODO: Spostarle nell'unita immobiliare cosi che siano uniche per unita immmob.
+        //TODO: FARE ANCHE IN V2
         ArrayList<CategoriaAttuatore> listaCategoriaAttuatori = new ArrayList<>();
         ArrayList<CategoriaSensore> listaCategoriaSensori = new ArrayList<>();
+
+
         ArrayList<ModalitaOperativa> listaModalitaOperative = new ArrayList<>();
         ArrayList<Attuatore> listaAttuatori = new ArrayList<>();
+        ;
         ArrayList<Sensore> listaSensori = new ArrayList<>();
 
-        String operatore;
+        CategoriaAttuatore cateAtt1 = new CategoriaAttuatore("cateAtt1", "testo");
+        CategoriaAttuatore cateAtt2 = new CategoriaAttuatore("cateAtt2", "testo");
+        ModalitaOperativa mod1 = new ModalitaOperativa("Acceso");
+        ModalitaOperativa mod2 = new ModalitaOperativa("Spento");
 
+        cateAtt1.aggiungiModalitaOperativa(mod1);
+        cateAtt1.aggiungiModalitaOperativa(mod2);
+        cateAtt2.aggiungiModalitaOperativa(mod1);
+        cateAtt2.aggiungiModalitaOperativa(mod2);
+
+        Attuatore att1 = new Attuatore("att1", cateAtt1, "Acceso", false);
+        Attuatore att2 = new Attuatore("att2", cateAtt2, "Spento", true);
+
+        CategoriaSensore cateSens1 = new CategoriaSensore("cateSens1", "testo", false);
+        CategoriaSensore cateSens2 = new CategoriaSensore("cateSens2", "testo", true);
+
+
+        ArrayList<Informazione> infos1 = new ArrayList<>();
+        infos1.add(new Informazione("misuraN", 50, 1));
+        infos1.add(mod1);
+        InformazioneNonNum infoNN = new InformazioneNonNum("infoNN");
+        ArrayList<String> domNN = new ArrayList<>();
+        domNN.add("Bona");
+        domNN.add("NonBona");
+        domNN.add("asfasf");
+        domNN.add("lol");
+        infoNN.setDominioNonNumerico(domNN);
+        infos1.add(infoNN);
+
+        ArrayList<Informazione> infos2 = new ArrayList<>();
+        infos2.add(new Informazione("misuraN2", 50, 1));
+        infos2.add(mod1);
+        InformazioneNonNum infoNN2 = new InformazioneNonNum("infoNN2");
+        ArrayList<String> domNN2 = new ArrayList<>();
+        domNN2.add("Boh");
+        domNN2.add("Trigger");
+        domNN2.add("bomba");
+        infoNN2.setDominioNonNumerico(domNN2);
+        infos2.add(infoNN2);
+
+        //TODO: Testare fino alla fine ma per ora sembra funzionare
+        cateSens1.setInfoRilevabili(infos1);
+        cateSens2.setInfoRilevabili(infos2);
+
+        Sensore s1 = new Sensore("s1", cateSens1);
+        Sensore s2 = new Sensore("s2", cateSens2);
+
+        listaAttuatori.add(att1);
+        listaAttuatori.add(att2);
+        listaSensori.add(s1);
+        listaSensori.add(s2);
+
+        RuleParser parser = new RuleParser("Regole.txt");
+
+        //TODO: Le regole sono per ora tutte considerate attive ma dopo magari si vuole che si possano disattivare
+        //    : ; per separare da attivazione della regola -> true allora regola attiva false altrimenti.
+        //LA PRIMA VARIABILE è NECESSARIAMENTE UN'INFORMAZIONE E NON UN VALORE COSTANTE NUMERICO o STRINGA
+        parser.writeRuleToFile("IF s1_cateSens1.misuraN > -10 AND s2_cateSens2.infoNN2 = Boh OR s2_cateSens2.infoNN2 = bomba THEN att1_cateAtt1 := Spento");
+        //TODO: La Marina le voleva in modo diverso ma fottesega...è compatibile con la nostra interpretazione personale
+        parser.writeRuleToFile("true AND true AND true THEN att2_cateAtt2 := Acceso , att1_cateAtt1 := Acceso");
+
+
+        //TODO: Le regole sono per ora tutte considerate attive ma dopo magari si vuole che si possano disattivare
+        String readRules = parser.readRuleFromFile();
+        String[] rules = readRules.split("\n");
+
+        //System.out.println(rules[0]);
+
+        //System.out.println(Arrays.toString("sdad.ddd".split("\\.")));
+
+        applyRules(listaSensori, listaAttuatori, rules);
+
+        /*String operatore;
+        //TODO: Imporre semmai camelcase per input su nomenclatura
         do {
             do {
                 operatore = InputDati.leggiStringa("Selezionare il tipo di Utente(manutentore/fruitore) o FINE per uscire: ");
@@ -1233,6 +1315,189 @@ public class Main {
         } while (!operatore.equals("FINE"));
         System.out.println("FINE");
 
+         */
+
     }
 
+    private static void applyRules(ArrayList<Sensore> listaSensori, ArrayList<Attuatore> listaAttuatori, String[] rules) {
+        for (String r : rules) {
+
+            String r2 = r.replace("IF ", "");
+
+            String[] tokens = r2.split(" THEN ");
+            boolean ris = calculate(tokens[0], listaSensori);
+            System.out.println(tokens[0] + ": " + ris);
+            if (ris)
+                applyActions(tokens[1], listaAttuatori);
+        }
+    }
+
+    private static void applyActions(String token, ArrayList<Attuatore> listaAttuatori) {
+        for (String tok : token.split(" , "))
+            apply(tok, listaAttuatori);
+    }
+
+    private static void apply(String act, ArrayList<Attuatore> listaAttuatori) {
+        String[] toks = act.split(" := ");
+
+        Attuatore actD = null;
+        for (Attuatore att : listaAttuatori) {
+            if (att.getNome().equals(toks[0])) {
+                actD = att;
+            }
+        }
+
+        if (actD == null)
+            return;
+        String modPrecedente = actD.getNome()+ ": " + actD.getModalitaAttuale()+ " -> ";
+        actD.setModalitaAttuale(toks[1]);
+        System.out.println(modPrecedente + actD.getModalitaAttuale());
+
+    }
+
+
+    private static boolean calculate(String cos, ArrayList<Sensore> listaSensori) {
+        if (cos.equals("true"))
+            return true;
+
+        if (cos.contains("AND")) {
+            String[] expTok = cos.split(" AND ",2);
+            return calculate(expTok[0], listaSensori) && calculate(expTok[1], listaSensori);
+        }
+
+        if (cos.contains("OR")) {
+            String[] expTok = cos.split(" OR ",2);
+            return calculate(expTok[0], listaSensori) || calculate(expTok[1], listaSensori);
+        }
+
+        if (cos.matches("[^<>=\t\n ]+ ([<>=]|<=|>=) [^<>=\t\n ]+")) {
+            String[] expTok = cos.split(" ");
+            return getValExp(expTok, listaSensori);
+
+        }
+        return false;
+
+    }
+
+    //TODO: Il rispetto della 'grammatica' e coerenza delle regole deve essere fatto nel main durante input da parte dell'utente
+    //TODO: Però siccome non mi veniva la logica ;D....togliere logica di controllo correttezza una volta fatta PER BENE nel Main
+    private static boolean getValExp(String[] toks, ArrayList<Sensore> listaSensori) {
+        String var1 = toks[0];
+        String operator = toks[1];
+        String var2 = toks[2];
+
+
+        String[] sensVar = var1.split("\\.");
+        Sensore sens1 = null;
+
+        for (Sensore s : listaSensori) {
+            if (s.getNome().equals(sensVar[0])) {
+                sens1 = s;
+                System.out.println("Sensore s1 trovato");
+                break;
+            }
+        }
+
+        if (sens1 == null)
+            return false;
+
+        Informazione misura1 = sens1.getInformazione(sensVar[1]);
+
+        if (misura1 == null) {
+            System.out.println("Misura s1 non trovata");
+            return false;
+        }
+
+        if (var2.matches("-?[0-9]+")) {
+
+            if (misura1.getTipo().equals("NN"))
+                return false;
+
+            int value = (int) misura1.getValore();
+            int num = Integer.parseInt(var2);
+
+            System.out.println("");
+
+            if (operator.startsWith("<")) {
+                if (operator.endsWith("="))
+                    return value <= num;
+                else
+                    return value < num;
+
+            } else if (operator.startsWith(">")) {
+                if (operator.endsWith("="))
+                    return value >= num;
+                else
+                    return value > num;
+
+            } else {
+                return value == num;
+
+            }
+        }
+
+        if (var2.matches("[A-Za-z]([a-zA-Z]|[0-9])*_[A-Za-z]([a-zA-Z]|[0-9])+\\.[A-Za-z]([a-zA-Z]|[0-9])+")) {
+            String[] sensVar2 = var2.split("\\.");
+            Sensore sens2 = null;
+
+            for (Sensore s : listaSensori) {
+                if (s.getNome().equals(sensVar2[0])) {
+                    System.out.println("Sensor s2 trovato");
+                    sens2 = s;
+                    break;
+                }
+            }
+
+            if (sens2 == null)
+                return false;
+
+            Informazione misura2 = sens2.getInformazione(sensVar2[1]);
+
+            if (misura2 == null)
+                return false;
+
+            if (!misura1.getTipo().equals(misura2.getTipo()))
+                return false;
+
+            if (misura1.getTipo().equals("NN")) {
+                String sca1 = (String) misura1.getValore();
+                String sca2 = (String) misura2.getValore();
+
+                if (!operator.equals("="))
+                    return false;
+                else
+                    return sca1.equals(sca2);
+
+            } else {
+                int value1 = (int) misura1.getValore();
+                int value2 = (int) misura2.getValore();
+
+                if (operator.startsWith("<")) {
+                    if (operator.endsWith("="))
+                        return value1 <= value2;
+                    else
+                        return value1 < value2;
+
+                } else if (operator.startsWith(">")) {
+                    if (operator.endsWith("="))
+                        return value1 >= value2;
+                    else
+                        return value1 > value2;
+
+                } else {
+                    return value1 == value2;
+
+                }
+            }
+        }
+
+        if (var2.matches("[a-zA-Z]+") && operator.equals("=")) {
+            if (misura1.getTipo().equals("NN")) {
+                String sca1 = (String) misura1.getValore();
+                return var2.equals(sca1);
+            }
+        }
+
+        return false;
+    }
 }
