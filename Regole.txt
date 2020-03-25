@@ -1,0 +1,2 @@
+IF s1_cateSens1.infoNN = Bona OR s1_cateSens1.infoNN = NonBona THEN att1_cateAtt1 := Spento
+false OR false AND false AND true OR false THEN att2_cateAtt2 := Acceso , att1_cateAtt1 := Acceso

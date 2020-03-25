@@ -111,12 +111,22 @@ public class Sensore {
         return null;
     }
 
+    //TODO: Usarla quando bisogna refreshare i valori delle info senza andare a toccare troppo la classe info
+    public void aggiornaInfo(){
+        for (Informazione info : this.rilevazioni) {
+            if (info.getTipo().equals("M"))
+                continue;
+            info.aggiornaValore();
+        }
+    }
+
     /**
      *
      * @return una rappresentazione descrittiva in formato testuale di un sensore
      */
     @Override
-    //TODO: Secondo me si puo togliere quel if sulla mod
+    //TODO: Secondo me si puo togliere quel if sulla mod perche è cambiata la classe Modalità operativa
+
     public String toString() {
         String visualizza ="Nome sensore: " + this.getNome() + ", rilevazioni effettuate:\n";
         for(Informazione info : this.getRilevazioni()) {

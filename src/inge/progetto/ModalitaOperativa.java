@@ -18,11 +18,7 @@ import java.util.HashMap;
 public class ModalitaOperativa extends Informazione
                                 implements Serializable {
 
-    //TODO: Aggiungere magari una stringa per il valore in quanto ora serve!!!
-    //    : Tocca magari aggiungere un metodo getValore e avere come nome della modalità op "MODALITA OPERATIVA" e magari avere anche
-    //      toString piu generalizzato
 
-    private String valore;
     /**
      * Insieme di parametri di una modalit&agrave; operativa.
      * Ciascun parametro &egrave; dotato di nome, diverso da quello degli altri parametri della medesima modalit&agrave; e assume un valore numerico
@@ -34,19 +30,22 @@ public class ModalitaOperativa extends Informazione
      * @param valore nome della modalit&agrave; operativa
      */
     public ModalitaOperativa(String valore) {
+        //ogni modalità si chiamera come tale e avranno un valore che equivale al nome della modalità operativa
+        //cosi da rendere la classe simile alla classe informazione
         super("Modalita Operativa");
         this.valore = valore;
-        super.setTipo("NN");
+        super.setTipo("M"); //Proviamo a metterlo tipo M prima l'avevo messo NN ma magari faceva confusione con InfoNonNUm
         this.parametri = new HashMap<>();
     }
 
 
     /**Costruisce un istanza di modalit&agrave; operativa; in questo sar&agrave; una modalita operativa parametrica in quanto vengono definiti anche i
-     * @param nome nome della modalit&agrave; operativa
+     * @param valore nome della modalit&agrave; operativa
      * @param parametri parametri da specificare nel caso la modalit&agrave; sia parametrica
      */
-    public ModalitaOperativa(String nome, HashMap<String, Integer> parametri) {
-        super(nome);
+    public ModalitaOperativa(String valore, HashMap<String, Integer> parametri) {
+        super("Modalità Operativa");
+        this.valore = valore;
         this.parametri = parametri;
         super.setTipo("NN");
     }
@@ -72,7 +71,7 @@ public class ModalitaOperativa extends Informazione
 
     @Override
     public String getValore() {
-        return this.valore;
+        return (String) this.valore;
     }
 
     /**
@@ -88,7 +87,7 @@ public class ModalitaOperativa extends Informazione
                 out.append("...[ ").append(key).append(":").append(parametri.get(key)).append(" ]");
             }
         }
-        return String.valueOf(out);
+        return out.toString();
     }
 
     /**

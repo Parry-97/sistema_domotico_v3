@@ -30,14 +30,22 @@ import java.util.*;
  * @author Parampal Singh, Mattia Nodari
  */
 public class Main {
+    //TODO: Capire dove refreshare il valore->
+
+    /*Si potrebbe aggiornarli dopo ogni controllo delle regole.....dopo ogni visualizzazione delle rilevazioni...
+        Usare il metodo aggiornaInfo della classe Sensore, da applicare a ogni sensore della listaSensori
+     */
+
 
     public static void main(String[] args) {
 
 
-
+        //TODO: Cambiare logica su controllo della modalità operativa -> sostituire confronti di controllo usanti getNome() con getValore()
         /*UnitaImmobiliare unitaImmobiliare = new UnitaImmobiliare();
         ArrayList<UnitaImmobiliare> listaUnitaImmobiliari = new ArrayList<>();
         */
+
+        //TODO: Creare logica input delle regole
 
         //TODO: Spostarle nell'unita immobiliare cosi che siano uniche per unita immmob.
         //TODO: FARE ANCHE IN V2
@@ -47,13 +55,14 @@ public class Main {
 
         ArrayList<ModalitaOperativa> listaModalitaOperative = new ArrayList<>();
         ArrayList<Attuatore> listaAttuatori = new ArrayList<>();
-        ;
+
         ArrayList<Sensore> listaSensori = new ArrayList<>();
 
         CategoriaAttuatore cateAtt1 = new CategoriaAttuatore("cateAtt1", "testo");
         CategoriaAttuatore cateAtt2 = new CategoriaAttuatore("cateAtt2", "testo");
         ModalitaOperativa mod1 = new ModalitaOperativa("Acceso");
         ModalitaOperativa mod2 = new ModalitaOperativa("Spento");
+
 
         cateAtt1.aggiungiModalitaOperativa(mod1);
         cateAtt1.aggiungiModalitaOperativa(mod2);
@@ -74,8 +83,8 @@ public class Main {
         ArrayList<String> domNN = new ArrayList<>();
         domNN.add("Bona");
         domNN.add("NonBona");
-        domNN.add("asfasf");
-        domNN.add("lol");
+        //domNN.add("asfasf");
+        //domNN.add("lol");
         infoNN.setDominioNonNumerico(domNN);
         infos1.add(infoNN);
 
@@ -86,7 +95,7 @@ public class Main {
         ArrayList<String> domNN2 = new ArrayList<>();
         domNN2.add("Boh");
         domNN2.add("Trigger");
-        domNN2.add("bomba");
+        //domNN2.add("bomba");
         infoNN2.setDominioNonNumerico(domNN2);
         infos2.add(infoNN2);
 
@@ -102,28 +111,31 @@ public class Main {
         listaSensori.add(s1);
         listaSensori.add(s2);
 
+
+
         RuleParser parser = new RuleParser("Regole.txt");
 
-        //TODO: Le regole sono per ora tutte considerate attive ma dopo magari si vuole che si possano disattivare
-        //    : ; per separare da attivazione della regola -> true allora regola attiva false altrimenti.
         //LA PRIMA VARIABILE è NECESSARIAMENTE UN'INFORMAZIONE E NON UN VALORE COSTANTE NUMERICO o STRINGA
-        parser.writeRuleToFile("IF s1_cateSens1.misuraN > -10 AND s2_cateSens2.infoNN2 = Boh OR s2_cateSens2.infoNN2 = bomba THEN att1_cateAtt1 := Spento");
-        //TODO: La Marina le voleva in modo diverso ma fottesega...è compatibile con la nostra interpretazione personale
-        parser.writeRuleToFile("true AND true AND true THEN att2_cateAtt2 := Acceso , att1_cateAtt1 := Acceso");
+        parser.writeRuleToFile("IF s1_cateSens1.infoNN = Bona OR s1_cateSens1.infoNN = NonBona THEN att1_cateAtt1 := Spento");
 
 
-        //TODO: Le regole sono per ora tutte considerate attive ma dopo magari si vuole che si possano disattivare
+        parser.writeRuleToFile("false OR false AND false AND true OR false THEN att2_cateAtt2 := Acceso , att1_cateAtt1 := Acceso");
+
+        //"dsadada".matches("[a-z]+(([A-Z][a-z]+)|[0-9])*");
+
         String readRules = parser.readRuleFromFile();
         String[] rules = readRules.split("\n");
 
-        //System.out.println(rules[0]);
+
+        System.out.println(rules[0]);
 
         //System.out.println(Arrays.toString("sdad.ddd".split("\\.")));
 
         applyRules(listaSensori, listaAttuatori, rules);
 
+
         /*String operatore;
-        //TODO: Imporre semmai camelcase per input su nomenclatura
+        //TODO: Imporre semmai camelcase per input su nomenclatura -> possibile regex/pattern = [a-z]+(([A-Z][a-z])|[0-9])*
         do {
             do {
                 operatore = InputDati.leggiStringa("Selezionare il tipo di Utente(manutentore/fruitore) o FINE per uscire: ");
@@ -1355,19 +1367,19 @@ public class Main {
 
     }
 
-
+    //IL CALCOLO DELLE REGOLE HA UN'ASSOCIAZIONE A DESTRA
     private static boolean calculate(String cos, ArrayList<Sensore> listaSensori) {
         if (cos.equals("true"))
             return true;
 
-        if (cos.contains("AND")) {
-            String[] expTok = cos.split(" AND ",2);
-            return calculate(expTok[0], listaSensori) && calculate(expTok[1], listaSensori);
-        }
-
         if (cos.contains("OR")) {
             String[] expTok = cos.split(" OR ",2);
             return calculate(expTok[0], listaSensori) || calculate(expTok[1], listaSensori);
+        }
+
+        if (cos.contains("AND")) {
+            String[] expTok = cos.split(" AND ",2);
+            return calculate(expTok[0], listaSensori) && calculate(expTok[1], listaSensori);
         }
 
         if (cos.matches("[^<>=\t\n ]+ ([<>=]|<=|>=) [^<>=\t\n ]+")) {
@@ -1380,7 +1392,7 @@ public class Main {
     }
 
     //TODO: Il rispetto della 'grammatica' e coerenza delle regole deve essere fatto nel main durante input da parte dell'utente
-    //TODO: Però siccome non mi veniva la logica ;D....togliere logica di controllo correttezza una volta fatta PER BENE nel Main
+    //TODO: Togliere semmai logica di controllo correttezza una volta fatta PER BENE nel Main
     private static boolean getValExp(String[] toks, ArrayList<Sensore> listaSensori) {
         String var1 = toks[0];
         String operator = toks[1];
@@ -1436,7 +1448,7 @@ public class Main {
             }
         }
 
-        if (var2.matches("[A-Za-z]([a-zA-Z]|[0-9])*_[A-Za-z]([a-zA-Z]|[0-9])+\\.[A-Za-z]([a-zA-Z]|[0-9])+")) {
+        if (var2.matches("[A-Za-z]([a-zA-Z]|[0-9])*_[A-Za-z]([a-zA-Z]|[0-9])+\\.([a-zA-Z]|[0-9])+")) {
             String[] sensVar2 = var2.split("\\.");
             Sensore sens2 = null;
 
