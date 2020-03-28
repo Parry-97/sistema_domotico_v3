@@ -9,7 +9,8 @@ public class RuleParser {
     public RuleParser(String fileName) {
         this.fileName = fileName;
     }
-
+    //TODO: creare file appena viene chiamato dal costruttore di unità immobiliare per correggere errore quando avviene prima la lettura da file che la scrittura(che cre il file)
+    // : dare messaggio errore quando viene letto file non creato perchè non scritto precedentemente
     public void writeRuleToFile(String text) {
         try {
             FileWriter fileWriter = new FileWriter(fileName,true);

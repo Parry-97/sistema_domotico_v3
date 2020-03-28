@@ -111,7 +111,6 @@ public class Sensore {
         return null;
     }
 
-    //TODO: Usarla quando bisogna refreshare i valori delle info senza andare a toccare troppo la classe info
     public void aggiornaInfo(){
         for (Informazione info : this.rilevazioni) {
             if (info.getTipo().equals("M"))
