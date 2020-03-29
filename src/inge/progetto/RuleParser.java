@@ -12,12 +12,15 @@ public class RuleParser {
 
     public void writeRuleToFile(String text) {
         try {
+
+
             FileWriter fileWriter = new FileWriter(fileName,true);
             PrintWriter writer = new PrintWriter(fileWriter);
 
             writer.println(text);
 
             writer.close();
+            fileWriter.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -25,8 +28,14 @@ public class RuleParser {
 
     public String readRuleFromFile() {
         StringBuilder output = new StringBuilder();
+        boolean presente = new File(this.fileName).exists();
+
+        if (!presente) {
+            return "";
+        }
         try {
             FileReader reader = new FileReader(fileName);
+
             BufferedReader bufferedReader = new BufferedReader(reader);
 
 
@@ -35,8 +44,8 @@ public class RuleParser {
                 output.append(line).append("\n");
             }
 
+            bufferedReader.close();
             reader.close();
-
 
         } catch (IOException e) {
             e.printStackTrace();

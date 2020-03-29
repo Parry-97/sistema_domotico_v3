@@ -149,7 +149,7 @@ public class Attuatore {
     public void setModalitaAttuale(String nuovaModalita, String nomeParametro, int valoreParametro) {
         if (listaComandati.isEmpty()) {
             System.out.println("XX L'attuatore non comanda alcun artefatto XX");
-            return;
+            //return;
         }
 
         if(this.modalitaAttuale.equals(nuovaModalita)) {

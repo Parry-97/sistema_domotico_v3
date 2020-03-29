@@ -43,7 +43,9 @@ public class Main {
         //TODO: Cambiare logica su controllo della modalità operativa -> sostituire confronti di controllo usanti getNome() con getValore()
         /*UnitaImmobiliare unitaImmobiliare = new UnitaImmobiliare();
         ArrayList<UnitaImmobiliare> listaUnitaImmobiliari = new ArrayList<>();
-        */
+
+         */
+
 
         //TODO: Creare logica input delle regole
 
@@ -62,12 +64,18 @@ public class Main {
         CategoriaAttuatore cateAtt2 = new CategoriaAttuatore("cateAtt2", "testo");
         ModalitaOperativa mod1 = new ModalitaOperativa("Acceso");
         ModalitaOperativa mod2 = new ModalitaOperativa("Spento");
+        HashMap<String,Integer> params = new HashMap<>();
+        params.put("p1",10);
+        params.put("p2",20);
+        params.put("p3",30);
+        ModalitaOperativa modP = new ModalitaOperativa("parametrica",params);
 
 
         cateAtt1.aggiungiModalitaOperativa(mod1);
         cateAtt1.aggiungiModalitaOperativa(mod2);
         cateAtt2.aggiungiModalitaOperativa(mod1);
         cateAtt2.aggiungiModalitaOperativa(mod2);
+        cateAtt2.aggiungiModalitaOperativa(modP);
 
         Attuatore att1 = new Attuatore("att1", cateAtt1, "Acceso", false);
         Attuatore att2 = new Attuatore("att2", cateAtt2, "Spento", true);
@@ -119,23 +127,18 @@ public class Main {
         parser.writeRuleToFile("IF s1_cateSens1.infoNN = Bona OR s1_cateSens1.infoNN = NonBona THEN att1_cateAtt1 := Spento");
 
 
-        parser.writeRuleToFile("false OR false AND false AND true OR false THEN att2_cateAtt2 := Acceso , att1_cateAtt1 := Acceso");
-
-        //"dsadada".matches("[a-z]+(([A-Z][a-z]+)|[0-9])*");
+        parser.writeRuleToFile("true AND false OR true THEN att2_cateAtt2 := parametrica|p44|40 , att1_cateAtt1 := Acceso");
 
         String readRules = parser.readRuleFromFile();
         String[] rules = readRules.split("\n");
 
 
         System.out.println(rules[0]);
-
-        //System.out.println(Arrays.toString("sdad.ddd".split("\\.")));
-
         applyRules(listaSensori, listaAttuatori, rules);
 
 
         /*String operatore;
-        //TODO: Imporre semmai camelcase per input su nomenclatura -> possibile regex/pattern = [a-z]+(([A-Z][a-z])|[0-9])*
+        //TODO: Imporre semmai camelcase per input su nomenclatura di dispositivi-> possibile regex/pattern = [a-z]+(([A-Z][a-z])|[0-9])*
         do {
             do {
                 operatore = InputDati.leggiStringa("Selezionare il tipo di Utente(manutentore/fruitore) o FINE per uscire: ");
@@ -1329,7 +1332,11 @@ public class Main {
 
          */
 
+
+
     }
+
+
 
     private static void applyRules(ArrayList<Sensore> listaSensori, ArrayList<Attuatore> listaAttuatori, String[] rules) {
         for (String r : rules) {
@@ -1361,8 +1368,20 @@ public class Main {
 
         if (actD == null)
             return;
+
         String modPrecedente = actD.getNome()+ ": " + actD.getModalitaAttuale()+ " -> ";
-        actD.setModalitaAttuale(toks[1]);
+        if (toks[1].contains("|")) {
+            String[] againTokens = toks[1].split("\\|");
+
+            //TODO: Se necessario fare un output di warning per utente che altrimenti si inscimmia
+            if (!againTokens[2].matches("-?[0-9]+"))
+                return;
+
+            actD.setModalitaAttuale(againTokens[0],againTokens[1],Integer.parseInt(againTokens[2]));
+        } else {
+            actD.setModalitaAttuale(toks[1]);
+        }
+        //A me non soddisfa il fatto che non venga fatto vedere il parametro modificato
         System.out.println(modPrecedente + actD.getModalitaAttuale());
 
     }
@@ -1430,22 +1449,7 @@ public class Main {
 
             System.out.println("");
 
-            if (operator.startsWith("<")) {
-                if (operator.endsWith("="))
-                    return value <= num;
-                else
-                    return value < num;
-
-            } else if (operator.startsWith(">")) {
-                if (operator.endsWith("="))
-                    return value >= num;
-                else
-                    return value > num;
-
-            } else {
-                return value == num;
-
-            }
+            return evalOp(operator, value, num);
         }
 
         if (var2.matches("[A-Za-z]([a-zA-Z]|[0-9])*_[A-Za-z]([a-zA-Z]|[0-9])+\\.([a-zA-Z]|[0-9])+")) {
@@ -1484,22 +1488,7 @@ public class Main {
                 int value1 = (int) misura1.getValore();
                 int value2 = (int) misura2.getValore();
 
-                if (operator.startsWith("<")) {
-                    if (operator.endsWith("="))
-                        return value1 <= value2;
-                    else
-                        return value1 < value2;
-
-                } else if (operator.startsWith(">")) {
-                    if (operator.endsWith("="))
-                        return value1 >= value2;
-                    else
-                        return value1 > value2;
-
-                } else {
-                    return value1 == value2;
-
-                }
+                return evalOp(operator, value1, value2);
             }
         }
 
@@ -1511,5 +1500,24 @@ public class Main {
         }
 
         return false;
+    }
+
+    private static boolean evalOp(String operator, int value1, int value2) {
+        if (operator.startsWith("<")) {
+            if (operator.endsWith("="))
+                return value1 <= value2;
+            else
+                return value1 < value2;
+
+        } else if (operator.startsWith(">")) {
+            if (operator.endsWith("="))
+                return value1 >= value2;
+            else
+                return value1 > value2;
+
+        } else {
+            return value1 == value2;
+
+        }
     }
 }
