@@ -39,10 +39,6 @@ public class UnitaImmobiliare {
 
     private String nome;
 
-    //TODO: Cerchiamo di renderlo un 'componente unico' che possa essere riutilizzato dalle varie unita singolarmente
-    //    : Devo metterlo in quelle con tipo vuoto perche altrimenti NullPointerEx (case 4 fruitore)
-    private RuleParser regole;
-
     /**Costruttore per specifica di un oggetto UnitaImmboliare
      * @param tipo destinazione d'uso dell'unit&agrave; immobiliare
      * @param nome nome dell'unit&agrave; immobiliare
@@ -53,7 +49,6 @@ public class UnitaImmobiliare {
         this.listaStanze = new ArrayList<>();
         this.listaSensori = new ArrayList<>();
         this.listaAttuatori = new ArrayList<>();
-        this.regole = new RuleParser(nome+".txt");
         this.nome = nome;
         this.tipo = tipo;
     }
@@ -132,14 +127,6 @@ public class UnitaImmobiliare {
      */
     public void setListaSensori(ArrayList<Sensore> listaSensori) {
         this.listaSensori = listaSensori;
-    }
-
-    public RuleParser getRegole() {
-        return regole;
-    }
-
-    public void setRegole(RuleParser regole) {
-        this.regole = regole;
     }
 
     /**Permette di specificare una nuova stanza da aggiungere all'unit&agrave; immobiliare
@@ -246,4 +233,5 @@ public class UnitaImmobiliare {
             s.aggiornaInfo();
 
     }
+
 }

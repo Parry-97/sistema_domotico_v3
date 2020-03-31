@@ -34,7 +34,7 @@ public class ModalitaOperativa extends Informazione
         //cosi da rendere la classe simile alla classe informazione
         super("Modalita_Operativa");
         this.valore = valore;
-        super.setTipo("M"); //Proviamo a metterlo tipo M prima l'avevo messo NN ma magari faceva confusione con InfoNonNUm
+        super.setTipo("NN"); //Proviamo a metterlo tipo M prima l'avevo messo NN ma magari faceva confusione con InfoNonNUm
         this.parametri = new HashMap<>();
     }
 
@@ -47,7 +47,7 @@ public class ModalitaOperativa extends Informazione
         super("Modalità_Operativa");
         this.valore = valore;
         this.parametri = parametri;
-        super.setTipo("M");
+        super.setTipo("NN");
     }
 
     /** Permette di modificare un parametro della modalità operativa
