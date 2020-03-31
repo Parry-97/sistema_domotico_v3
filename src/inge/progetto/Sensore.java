@@ -124,8 +124,6 @@ public class Sensore {
      * @return una rappresentazione descrittiva in formato testuale di un sensore
      */
     @Override
-    //TODO: Secondo me si puo togliere quel if sulla mod perche è cambiata la classe Modalità operativa
-
     public String toString() {
         String visualizza ="Nome sensore: " + this.getNome() + ", rilevazioni effettuate:\n";
         for(Informazione info : this.getRilevazioni()) {

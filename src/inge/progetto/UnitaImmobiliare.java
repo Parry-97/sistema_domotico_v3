@@ -39,6 +39,8 @@ public class UnitaImmobiliare {
 
     private String nome;
 
+    //TODO: Cerchiamo di renderlo un 'componente unico' che possa essere riutilizzato dalle varie unita singolarmente
+    //    : Devo metterlo in quelle con tipo vuoto perche altrimenti NullPointerEx (case 4 fruitore)
     private RuleParser regole;
 
     /**Costruttore per specifica di un oggetto UnitaImmboliare
@@ -61,6 +63,8 @@ public class UnitaImmobiliare {
      */
     public UnitaImmobiliare() {
         this.tipo = "";
+        this.listaSensori = new ArrayList<>();
+        this.listaAttuatori = new ArrayList<>();
     }
 
     /**Permette di ottenere lista/insieme di stanze nell'unit&agrave; immobiliare
@@ -195,21 +199,37 @@ public class UnitaImmobiliare {
     /**Fornisce una rappresentazione testuale che descrive complessivamente l'unit&agrave; immobiliare, le stanze e gli artefatti in essa contenuti.
      * @return stringa descrittiva dell'intera unit&agrave; immobiliare
      */
-    public String visualizzaDescrizione() {
-        String visualizza = "\n§ Tipo unità immobiliare: " + this.getTipo() + ", è costituita dalle seguenti stanze:\n";
 
+    public String visualizzaDescrizione() {
+        StringBuilder visualizza = new StringBuilder("\n§ Tipo unità immobiliare: " + this.getTipo() + ", è costituita dalle seguenti stanze:\n");
+
+        StringBuilder visStanze = new StringBuilder();
         for (Stanza stanza : listaStanze) {
-            visualizza += stanza.visualizzaDisposizione();
+            visStanze.append(stanza.visualizzaDisposizione());
         }
 
-        visualizza += "\n\n§ Artefatti esterni all'unità immobiliare:\n";
+        if (visStanze.length() > 0)
+            visualizza.append(visStanze);
+        else
+            visualizza.append("XX Non sono state aggiunte all'unità immobiliare XX");
+
+        visualizza.append("\n\n§ Artefatti esterni all'unità immobiliare:\n");
+
+        StringBuilder visArte = new StringBuilder();
+
         for(Stanza stanza : listaStanze) {
             for (Artefatto artefatto : listaArtefatti) {
                 if(!stanza.getListaArtefatti().contains(artefatto))
-                    visualizza += artefatto.visualizzaDispositivi();
+                    visArte.append(artefatto.visualizzaDispositivi());
             }
         }
-        return visualizza;
+
+        if (visArte.length() > 0)
+            visualizza.append(visArte);
+        else
+            visualizza.append("XX Non sono presenti artefatti esterni all'unità immobiliare XX");
+
+        return visualizza.toString();
     }
 
     /**Fornisce il nome dell'unit&agrave; immobiliare
@@ -219,7 +239,7 @@ public class UnitaImmobiliare {
         return nome;
     }
 
-    public void refrahLetture() {
+    public void refreshLetture() {
         if(listaSensori.isEmpty())
             return;
         for (Sensore s : listaSensori)

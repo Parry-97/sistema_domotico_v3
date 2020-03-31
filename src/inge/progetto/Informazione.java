@@ -11,7 +11,6 @@ import java.io.Serializable;
  */
 public class Informazione implements Serializable {
 
-    //TODO: Conviene memorizzare o avere un valore stabile dell'informazione
 
     private String nome;
     private String tipo; //nuova aggiunta per capire che tipo di info si tratta
@@ -67,8 +66,7 @@ public class Informazione implements Serializable {
     /**Fornisce la misura/valore dell'informazione, un valore casuale numerico che cade entro il dominio specificato
      * @return valore numerico dell'informazione
      */
-    //TODO: Fare in modo che non triggeri il valore della modalità operativa però !!!!!
-    public void aggiornaValore() { //Trigger quel return Object
+    public void aggiornaValore() {
         this.valore =  (int) (Math.random() * (this.VALORE_MAX - this.VALORE_MIN) + this.VALORE_MIN);
     }
 

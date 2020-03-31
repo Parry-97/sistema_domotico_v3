@@ -39,7 +39,7 @@ public class Main {
         ArrayList<CategoriaAttuatore> listaCategoriaAttuatori = new ArrayList<>();
         ArrayList<CategoriaSensore> listaCategoriaSensori = new ArrayList<>();
         int contatoreOperazioni = 0;
-/*
+    /*
         CategoriaAttuatore cateAtt1 = new CategoriaAttuatore("cateAtt1", "testo");
         CategoriaAttuatore cateAtt2 = new CategoriaAttuatore("cateAtt2", "testo");
         ModalitaOperativa mod1 = new ModalitaOperativa("Acceso");
@@ -115,7 +115,7 @@ public class Main {
         System.out.println(rules[0]);
         applyRules(listaSensori, listaAttuatori, rules);
 */
-
+        //TODO: TESTARE A FONDO
         String operatore;
         //TODO: Imporre semmai camelcase per input su nomenclatura -> possibile regex/pattern = [a-z]+(([A-Z][a-z])|[0-9])*
         do {
@@ -138,7 +138,7 @@ public class Main {
 
                             StringBuilder visUnits = new StringBuilder();
                             for (UnitaImmobiliare unitaImm : listaUnitaImmobiliari) {
-                                    visUnits.append("-- Unita Immobiliare: ").append(unitaImm.getNome()).append("\n");
+                                visUnits.append("-- Unita Immobiliare: ").append(unitaImm.getNome()).append("\n");
                             }
 
                             if (visUnits.length() > 0)
@@ -432,7 +432,7 @@ public class Main {
                                             break;
                                         }
                                         String statoAttuale = InputDati.leggiStringa("Inserisci lo stato di default dell'attuatore: ");
-                                        for (ModalitaOperativa mod : listaModalitaOperative) {
+                                        for (ModalitaOperativa mod : listaMods) {
                                             if (mod.getValore().equals(statoAttuale)) {
                                                 boolean singolo = InputDati.yesOrNo("Ha caratterstica di associazione singola: ");
                                                 unitaImmobiliare.aggiungiAttuatore(new Attuatore(nuovoAttuatore, cat, statoAttuale, singolo));
@@ -860,7 +860,7 @@ public class Main {
                             if (!siSen)
                                 System.out.println("XXX Sensore non presente. E' necessario crearlo XXX");
 
-                            unitaImmobiliare.refrahLetture(); //TODO: Verificare la correttezza della rilettura dei sensori
+                            unitaImmobiliare.refreshLetture();
 
                             break;
                         case 14:
@@ -931,6 +931,7 @@ public class Main {
 
                             break;
                         case 15:
+
                             int sceltaVisualizza;
                             do {
                                 System.out.println("\n1) VISUALIZZA COMPOSIZIONE UNITA' IMMOBILIARE\n2) VISUALIZZA COMPOSIZIONE STANZE\n3) VISUALIZZA COMPOSIZIONE ARTEFATTI\n" +
@@ -971,6 +972,7 @@ public class Main {
                                         }
                                         break;
                                     case 4:
+
                                         System.out.println();
                                         if (unitaImmobiliare.getListaSensori().isEmpty())
                                             System.out.println("Lista sensori attualmente vuota. E' necessario crearne di nuovi per utilizzare questa funzione");
@@ -1030,32 +1032,18 @@ public class Main {
                                 break;
                             }
 
-                            try {
-                                FileOutputStream out = new FileOutputStream("categorieSens_Att");
-                                ObjectOutputStream s = new ObjectOutputStream(out);
-                                s.writeObject(listaCategoriaAttuatori);
-                                s.writeObject(listaCategoriaSensori);
-                                s.flush();
-                                System.out.println("*** Salvataggio su file  è andato a buon fine ***");
 
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                                System.out.println("XXX Errore durante salvataggio su file XXX ");
-                            }
+                            salva(listaCategoriaAttuatori, "Categorie_Attuatori.ser");
+                            salva(listaCategoriaSensori, "Categorie_Sensori.ser");
+                            salva(listaModalitaOperative, "Modalita_Operative.ser");
                             break;
 
                         case 17:
-                            FileInputStream in;
-                            try {
-                                in = new FileInputStream("categorieSens_Att");
-                                ObjectInputStream s = new ObjectInputStream(in);
-                                listaCategoriaAttuatori = (ArrayList<CategoriaAttuatore>) s.readObject();
-                                listaCategoriaSensori = (ArrayList<CategoriaSensore>) s.readObject();
-                                System.out.println("*** Ripristino da file è andato a buon fine ***");
-                            } catch (IOException | ClassNotFoundException e) {
-                                e.printStackTrace();
-                                System.out.println("XXX Errore durante caricamento da file XXX");
-                            }
+
+                            listaModalitaOperative = ripristina("Modalita_Operative.ser");
+                            listaCategoriaSensori = ripristina("Categorie_Sensori.ser");
+                            listaCategoriaAttuatori = ripristina("Categorie_Attuatori.ser");
+
                             break;
 
                         case 0:
@@ -1070,12 +1058,11 @@ public class Main {
                 unitaImmobiliare = new UnitaImmobiliare();
 
                 do {
-                    if(contatoreOperazioni == 5) {
+                    if (contatoreOperazioni == 4 && !unitaImmobiliare.getTipo().equals("")) {
                         String readRules = unitaImmobiliare.getRegole().readRuleFromFile();
-                        String[] rules = readRules.split("\n");
-                        applyRules(unitaImmobiliare.getListaSensori(), unitaImmobiliare.getListaAttuatori(), rules);
+                        applyRules(unitaImmobiliare.getListaSensori(), unitaImmobiliare.getListaAttuatori(), readRules);
                         contatoreOperazioni = 0;
-                        unitaImmobiliare.refrahLetture();
+                        unitaImmobiliare.refreshLetture();
 
                     }
                     contatoreOperazioni++;
@@ -1094,7 +1081,7 @@ public class Main {
 
                             System.out.println("...ELENCO DI UNITA IMMOBILIARI DISPONIBILI ALLA SCELTA...");
                             for (UnitaImmobiliare unit : listaUnitaImmobiliari)
-                                    System.out.println("-- Unita Immobiliare: " + unit.getNome() + "\n");
+                                System.out.println("-- Unita Immobiliare: " + unit.getNome() + "\n");
 
                             String seleziona = InputDati.leggiStringa("Accedi ad un'unità immobiliare  già creata per utilizzare le funzionalità del sistema(nome unità immobiliare da selezionare): ");
 
@@ -1153,6 +1140,8 @@ public class Main {
                             }
                             if (!siSen)
                                 System.out.println("XXX Sensore non presente. E' necessario crearlo XXX");
+
+                            unitaImmobiliare.refreshLetture();
 
                             break;
                         case 3:
@@ -1221,23 +1210,19 @@ public class Main {
                             }
 
                             break;
+                        //TODO: Aggiungere visualizzazione regole dell'unita immob
                         case 4:
                             int sceltaVisualizza;
                             do {
-                                if(contatoreOperazioni == 4) {
+                                if (contatoreOperazioni == 4 && !unitaImmobiliare.getTipo().equals("")) {
                                     String readRules = unitaImmobiliare.getRegole().readRuleFromFile();
-                                    String[] rules = readRules.split("\n");
-                                    applyRules(unitaImmobiliare.getListaSensori(), unitaImmobiliare.getListaAttuatori(), rules);
+                                    applyRules(unitaImmobiliare.getListaSensori(), unitaImmobiliare.getListaAttuatori(), readRules);
                                     contatoreOperazioni = 0;
-                                    unitaImmobiliare.refrahLetture();
+                                    unitaImmobiliare.refreshLetture();
 
                                 }
                                 contatoreOperazioni++;
 
-                                if (unitaImmobiliare.getTipo().equals("")) {
-                                    System.out.println("!!! Unità Immobiliare non creata. E' necessario che il manutentore ne definisca una prima di questa operazione !!!");
-                                    break;
-                                }
 
                                 System.out.println("\n1) VISUALIZZA COMPOSIZIONE UNITA' IMMOBILIARE\n2) VISUALIZZA COMPOSIZIONE STANZE\n3) VISUALIZZA COMPOSIZIONE ARTEFATTI\n" +
                                         "4) VISUALIZZA LISTA SENSORI E CATEGORIE SENSORI\n5) VISUALIZZA LISTA ATTUATORI E CATEGORIE ATTUATORI\n6) VISUALIZZA LISTA MODALITA' OPERATIVE\n0) USCITA");
@@ -1277,11 +1262,7 @@ public class Main {
                                         }
                                         break;
                                     case 4:
-                                        System.out.println();
-                                        if (unitaImmobiliare.getTipo().equals("")) {
-                                            System.out.println("!!! Unità Immobiliare non creata. E' necessario che il manutentore ne definisca una prima di questa operazione !!!");
-                                            break;
-                                        }
+
                                         if (unitaImmobiliare.getListaSensori().isEmpty())
                                             System.out.println("Lista sensori attualmente vuota. E' necessario crearne di nuovi per utilizzare questa funzione");
                                         else {
@@ -1329,9 +1310,10 @@ public class Main {
                             } while (sceltaVisualizza != 0);
 
                             break;
-
+                        //TODO: Mettere semplice "true" nelle condizioni
                         case 5:
-                            //TODO: tutti gli output da migliorare
+
+
                             if (unitaImmobiliare.getTipo().equals("")) {
                                 System.out.println("!!! Unità Immobiliare non creata. E' necessario che il manutentore ne definisca una prima di questa operazione !!!");
                                 break;
@@ -1341,9 +1323,19 @@ public class Main {
                                 System.out.println("XX Non sono presenti sensori da cui poter leggere rilevazioni XX");
                                 break;
                             }
+
+                            if (unitaImmobiliare.getListaAttuatori().isEmpty()) {
+                                System.out.println("XX Non sono presenti attuatori con cui poter interagire XX");
+                                break;
+                            }
+
                             System.out.println("\n...REGOLE ATTUALMENTE CREATE PER QUESTA UNITA' IMMOBILIARE...");
                             String readRules = unitaImmobiliare.getRegole().readRuleFromFile();
-                            System.out.println(readRules);
+
+                            if (readRules.equals(""))
+                                System.out.println("XX Non sono state definite regole per l'unita immobiliare selezionata XX\n");
+                            else
+                                System.out.println(readRules);
 
                             String regola = "IF ", logico = " ";
                             boolean proseguire = false;
@@ -1362,12 +1354,13 @@ public class Main {
                                 do {
                                     nomeSensore = InputDati.leggiStringa("Inserisci il nome del sensore sul quale applicare la regola: ");
                                     for (Sensore sensore : unitaImmobiliare.getListaSensori()) {
-                                        if(sensore.getNome().equals(nomeSensore)) {
+                                        if (sensore.getNome().equals(nomeSensore)) {
                                             siSens = true;
                                             break;
                                         }
                                     }
-                                } while(!siSens);
+                                } while (!siSens);
+
                                 for (Sensore s : unitaImmobiliare.getListaSensori()) {
                                     if (s.getNome().equals(nomeSensore)) {
                                         System.out.println("\n...INFORMAZIONI ATTUALMENTE CREATE DAL MANUTENTORE PER QUESTO SENSORE...");
@@ -1379,13 +1372,13 @@ public class Main {
                                         String nomeInformazione;
                                         do {
                                             nomeInformazione = InputDati.leggiStringa("Inserisci il nome dell'informazione da utilizzare nella regola: ");
-                                            for(Informazione info : s.getRilevazioni()) {
-                                                if(info.getNome().equals(nomeInformazione)) {
+                                            for (Informazione info : s.getRilevazioni()) {
+                                                if (info.getNome().equals(nomeInformazione)) {
                                                     siInfo = true;
                                                     break;
                                                 }
                                             }
-                                        } while(!siInfo);
+                                        } while (!siInfo);
                                         for (Informazione info : s.getRilevazioni()) {
                                             if (info.getNome().equals(nomeInformazione)) {
                                                 dato1 = nomeSensore + "." + nomeInformazione;
@@ -1408,11 +1401,20 @@ public class Main {
                                     }
                                 }
                                 regola += dato1 + " " + op + " ";
-                                boolean scelta = InputDati.yesOrNo("Si vuole inserire una rilevazione di un sensore(S) o una costante numerica(N)?");
+                                boolean scelta = false;
+
+                                //TODO: Vedere semmai se si riesce a fare magari che NON vengano inseriti sensori di tipo diversi
+
+                                if (unitaImmobiliare.getListaSensori().size() > 1) {
+                                    scelta = InputDati.yesOrNo("Si vuole inserire una rilevazione di un sensore(S) o una costante numerica(N)?");
+                                }
+
                                 if (scelta) {
                                     System.out.println("\n...SENSORI ATTUALMENTE CREATI DAL MANUTENTORE...");
 
                                     for (Sensore s : unitaImmobiliare.getListaSensori()) {
+                                        if (s.getNome().equals(nomeSensore))
+                                            continue;
                                         System.out.println("--- Nome sensore: " + s.getNome());
                                     }
 
@@ -1421,12 +1423,13 @@ public class Main {
                                     do {
                                         nomeSensor = InputDati.leggiStringa("Inserisci il nome del sensore sul quale applicare la regola: ");
                                         for (Sensore sensore : unitaImmobiliare.getListaSensori()) {
-                                            if(sensore.getNome().equals(nomeSensor)) {
+                                            if (sensore.getNome().equals(nomeSensor)) {
                                                 siSenso = true;
                                                 break;
                                             }
                                         }
-                                    } while(!siSenso);
+                                    } while (!siSenso || nomeSensor.equals(nomeSensore));
+
                                     for (Sensore s : unitaImmobiliare.getListaSensori()) {
                                         if (s.getNome().equals(nomeSensor)) {
                                             System.out.println("\n...INFORMAZIONI ATTUALMENTE CREATE DAL MANUTENTORE PER QUESTO SENSORE...");
@@ -1437,33 +1440,30 @@ public class Main {
 
                                             boolean siInfo = false;
                                             String nomeInformazione;
+
                                             do {
                                                 nomeInformazione = InputDati.leggiStringa("Inserisci il nome dell'informazione da utilizzare nella regola: ");
-                                                for(Informazione info : s.getRilevazioni()) {
-                                                    if(info.getNome().equals(nomeInformazione)) {
+                                                for (Informazione info : s.getRilevazioni()) {
+                                                    if (info.getNome().equals(nomeInformazione)) {
+                                                        dato2 = nomeSensor + "." + nomeInformazione;
                                                         siInfo = true;
                                                         break;
                                                     }
                                                 }
-                                            } while(!siInfo);
+                                            } while (!siInfo);
 
-                                            for (Informazione info : s.getRilevazioni()) {
-                                                if (info.getNome().equals(nomeInformazione)) {
-                                                    dato2 = nomeSensor + "." + nomeInformazione;
-                                                    proseguire = InputDati.yesOrNo("Si vuole aggiungere un'altra condizione per la seguente regola?");
-                                                    if (proseguire) {
-                                                        System.out.println("Operatori logici consentinti: AND, OR");
-                                                        do {
-                                                            logico = InputDati.leggiStringa("Inserisci il tipo di operatore logico: ");
-                                                        } while (!logico.equals("AND") && !logico.equals("OR"));
-                                                        regola += dato2 + " " + logico + " ";
-                                                    } else
-                                                        regola += dato2 + " ";
-                                                    break;
-                                                }
-                                            }
+                                            proseguire = InputDati.yesOrNo("Si vuole aggiungere un'altra condizione per la seguente regola?");
+                                            if (proseguire) {
+                                                System.out.println("Operatori logici consentinti: AND, OR");
+                                                do {
+                                                    logico = InputDati.leggiStringa("Inserisci il tipo di operatore logico: ");
+                                                } while (!logico.equals("AND") && !logico.equals("OR"));
+                                                regola += dato2 + " " + logico + " ";
+                                            } else
+                                                regola += dato2 + " ";
                                         }
                                     }
+
                                 } else {
                                     if (tipoDato.equals("NN")) {
                                         valoreNN = InputDati.leggiStringa("Inserisci la stringa da confrontare con la lettura del sensore non numerico: ");
@@ -1481,14 +1481,14 @@ public class Main {
                                         regola += logico + " ";
                                     }
                                 }
-                            } while(proseguire);
-                            //TODO:  controllare la parte then aggiungere controllo che esista in nome del parametro in mod param....
-                            // : ho "obbligato" l'utente ad inserire il nome corretto per evitare casini sui controlli degli errori e non creare regole buggate in partenza.
-                            // : ho messo un ciclo do.. while in ogni input dell'utente. Manca da fare solo la prima riga di questo commento.
+
+                            } while (proseguire);
+
                             regola += "THEN ";
                             System.out.println(regola);
 
                             boolean azione;
+
                             do {
                                 String attuatore = "";
                                 String modalita = "";
@@ -1497,6 +1497,8 @@ public class Main {
 
                                 System.out.println("\n...ATTUATORI ATTUALMENTE CREATI DAL MANUTENTORE CHE POSSONO ESSERE USATI PER LE AZIONI DELLA REGOLA...");
                                 for (Attuatore attr : unitaImmobiliare.getListaAttuatori()) {
+                                    if (regola.contains(attr.getNome()))
+                                        continue;
                                     System.out.println("--- Nome attuatore: " + attr.getNome());
                                 }
 
@@ -1504,12 +1506,16 @@ public class Main {
                                 do {
                                     nomeAttr = InputDati.leggiStringa("Inserisci il nome dell'attuatore al quale si vuole modificare la modalià operativa nella regola: ");
                                     for (Attuatore att : unitaImmobiliare.getListaAttuatori()) {
-                                        if(att.getNome().equals(nomeAttr)) {
+
+                                        if (regola.contains(nomeAttr))
+                                            continue;
+
+                                        if (att.getNome().equals(nomeAttr)) {
                                             siAttuat = true;
                                             break;
                                         }
                                     }
-                                } while(!siAttuat);
+                                } while (!siAttuat);
 
                                 for (Attuatore a : unitaImmobiliare.getListaAttuatori()) {
                                     if (a.getNome().equals(nomeAttr)) {
@@ -1525,12 +1531,12 @@ public class Main {
                                         do {
                                             nuovaMod = InputDati.leggiStringa("Inserisci la nuova modalità per questo attuatore che verrà settata al verificarsi della regola: ");
                                             for (ModalitaOperativa mod : a.getCategoria().getModalita()) {
-                                                if(mod.getNome().equals(nuovaMod)) {
+                                                if (mod.getValore().equals(nuovaMod)) {
                                                     siModa = true;
                                                     break;
                                                 }
                                             }
-                                        } while(!siModa);
+                                        } while (!siModa);
 
                                         for (ModalitaOperativa modal : a.getCategoria().getModalita()) {
                                             if (modal.getValore().equals(nuovaMod)) {
@@ -1538,12 +1544,24 @@ public class Main {
                                                 if (modal.isParametrica()) {
                                                     System.out.println("...PARAMETRI DELLA MODALITA...");
                                                     HashMap<String, Integer> params = modal.getParametri();
+
                                                     for (String key : params.keySet()) {
                                                         System.out.println("--- Nome parametro: " + key + " | valore parametro: " + params.get(key));
                                                     }
-                                                    String nomeParam = InputDati.leggiStringa("Inserisci il nome del parametro per questa modalità operativa: ");
 
-                                                    int nuovoVal = InputDati.leggiIntero("Inserisci il nuovo valore per questa modalità parametrica: ");
+                                                    String nomeParam;
+                                                    int nuovoVal = 0;
+                                                    boolean siParam = false;
+
+                                                    do {
+                                                        nomeParam = InputDati.leggiStringa("Inserisci il nome del parametro per questa modalità operativa: ");
+
+                                                        if (params.containsKey(nomeParam)) {
+                                                            nuovoVal = InputDati.leggiIntero("Inserisci il nuovo valore per questa modalità parametrica: ");
+                                                            siParam = true;
+                                                        }
+
+                                                    } while (!siParam);
 
                                                     modalita = nuovaMod + "|" + nomeParam + "|" + nuovoVal;
                                                 } else {
@@ -1555,11 +1573,27 @@ public class Main {
                                         break;
                                     }
                                 }
-                                regola += attuatore + modalita + " ; ";
-                                azione = InputDati.yesOrNo("Si vuole inserire un'altra azione da effettuare per questa regola?");
+                                regola += attuatore + modalita;
+
+                                int contaDisponibili = 0;
+                                for (Attuatore act : unitaImmobiliare.getListaAttuatori()) {
+                                    if (!regola.contains(act.getNome()))
+                                        contaDisponibili++;
+                                }
+
+                                if (contaDisponibili > 0) {
+                                    azione = InputDati.yesOrNo("Si vuole inserire un'altra azione da effettuare per questa regola?");
+                                } else {
+                                    System.out.println("\n!!! Non è possibile inserire ulteriori azioni !!!\n");
+                                    azione = false;
+                                }
+
+                                if (azione)
+                                    regola += " ; ";
+
                             } while (azione);
 
-                            System.out.println(regola);
+                            System.out.println("+++ Regola inserita: " + regola);
                             unitaImmobiliare.getRegole().writeRuleToFile(regola);
 
                             break;
@@ -1576,23 +1610,64 @@ public class Main {
 
     }
 
+    private static <T> ArrayList<T> ripristina(String filename) {
+        FileInputStream in;
+        ArrayList<T> list = new ArrayList<>();
+        try {
+            in = new FileInputStream(filename);
+            ObjectInputStream s = new ObjectInputStream(in);
+            list = (ArrayList<T>) s.readObject();
+            System.out.println("*** Ripristino delle " + filename.replace("_"," ")
+                                                                 .replace(".ser", "")  +" è andato a buon fine ***");
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("XXX Errore durante ripristino delle " + filename.replace("_"," ")
+                                                                                .replace(".ser", "") +" XXX");
+        }
+        return list;
+    }
 
+    public static <T> void salva(ArrayList<T> list, String filename) {
 
-    private static void applyRules(ArrayList<Sensore> listaSensori, ArrayList<Attuatore> listaAttuatori, String[] rules) {
+        try {
+
+            FileOutputStream out = new FileOutputStream(filename);
+            ObjectOutputStream s = new ObjectOutputStream(out);
+            s.writeObject(list);
+            s.flush();
+            System.out.println("*** Salvataggio delle " + filename.replace("_"," ")
+                                                                  .replace(".ser", "") +" è andato a buon fine ***");
+
+        } catch (IOException e) {
+            System.out.println("!!! Si è verificato un errore nel salvataggio delle " + filename.replace("_"," ")
+                                                                                                .replace(".ser", "") + " !!!");
+        }
+    }
+
+    //TODO: Aggiungere le funzioni o nella classe UnitaImmob o RuleParser
+    private static void applyRules(ArrayList<Sensore> listaSensori, ArrayList<Attuatore> listaAttuatori, String readRules) {
+        System.out.println("\n\n...APPLICAZIONE REGOLE...\n");
+
+        if (readRules.equals("")) {
+            System.out.println("XX Non sono state inserite regole per l'unita immobiliare XX\n");
+            return;
+        }
+
+        String[] rules = readRules.split("\n");
+
         for (String r : rules) {
 
             String r2 = r.replace("IF ", "");
-
             String[] tokens = r2.split(" THEN ");
+
             boolean ris = calculate(tokens[0], listaSensori);
-            System.out.println(tokens[0] + ": " + ris);
+            System.out.println(r + " :: " + ris);
             if (ris)
                 applyActions(tokens[1], listaAttuatori);
         }
     }
 
     private static void applyActions(String token, ArrayList<Attuatore> listaAttuatori) {
-        for (String tok : token.split(" , "))
+        for (String tok : token.split(" ; "))
             apply(tok, listaAttuatori);
     }
 
@@ -1607,22 +1682,20 @@ public class Main {
         }
 
         if (actD == null)
-            return;
+            return; //siccome abbiamo regole fatte di versioni precedenti...va bene cosi..gestito dal input
 
-        String modPrecedente = actD.getNome()+ ": " + actD.getModalitaAttuale()+ " -> ";
+        String modPrecedente = actD.getNome() + ": " + actD.getModalitaAttuale() + " -> ";
         if (toks[1].contains("|")) {
             String[] againTokens = toks[1].split("\\|");
 
-            //TODO: Se necessario fare un output di warning per utente che altrimenti si inscimmia
             if (!againTokens[2].matches("-?[0-9]+"))
                 return;
 
-            actD.setModalitaAttuale(againTokens[0],againTokens[1],Integer.parseInt(againTokens[2]));
+            actD.setModalitaAttuale(againTokens[0], againTokens[1], Integer.parseInt(againTokens[2]));
         } else {
             actD.setModalitaAttuale(toks[1]);
         }
-        //A me non soddisfa il fatto che non venga fatto vedere il parametro modificato
-        System.out.println(modPrecedente + actD.getModalitaAttuale());
+        System.out.println(modPrecedente + actD.getModalitaAttuale() + "\n");
 
     }
 
@@ -1632,12 +1705,12 @@ public class Main {
             return true;
 
         if (cos.contains("OR")) {
-            String[] expTok = cos.split(" OR ",2);
+            String[] expTok = cos.split(" OR ", 2);
             return calculate(expTok[0], listaSensori) || calculate(expTok[1], listaSensori);
         }
 
         if (cos.contains("AND")) {
-            String[] expTok = cos.split(" AND ",2);
+            String[] expTok = cos.split(" AND ", 2);
             return calculate(expTok[0], listaSensori) && calculate(expTok[1], listaSensori);
         }
 
@@ -1650,8 +1723,6 @@ public class Main {
 
     }
 
-    //TODO: Il rispetto della 'grammatica' e coerenza delle regole deve essere fatto nel main durante input da parte dell'utente
-    //TODO: Togliere semmai logica di controllo correttezza una volta fatta PER BENE nel Main
     private static boolean getValExp(String[] toks, ArrayList<Sensore> listaSensori) {
         String var1 = toks[0];
         String operator = toks[1];
@@ -1664,7 +1735,7 @@ public class Main {
         for (Sensore s : listaSensori) {
             if (s.getNome().equals(sensVar[0])) {
                 sens1 = s;
-                System.out.println("Sensore s1 trovato");
+                //System.out.println("Sensore s1 trovato");
                 break;
             }
         }
@@ -1687,7 +1758,7 @@ public class Main {
             int value = (int) misura1.getValore();
             int num = Integer.parseInt(var2);
 
-            System.out.println("");
+            System.out.println();
 
             return evalOp(operator, value, num);
         }
@@ -1698,7 +1769,6 @@ public class Main {
 
             for (Sensore s : listaSensori) {
                 if (s.getNome().equals(sensVar2[0])) {
-                    System.out.println("Sensor s2 trovato");
                     sens2 = s;
                     break;
                 }
