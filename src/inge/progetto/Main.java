@@ -115,7 +115,7 @@ public class Main {
 
         System.out.println(rules[0]);
         applyRules(listaSensori, listaAttuatori, rules);
-*/
+*/      //TODO: Togliere commenti o codice inutilizzato
         //TODO: TESTARE A FONDO
         String operatore;
         //TODO: Imporre semmai camelcase per input su nomenclatura -> possibile regex/pattern = [a-z]+(([A-Z][a-z])|[0-9])*
@@ -1641,5 +1641,4 @@ public class Main {
         }
     }
 
-    //TODO: Aggiungere le funzioni o nella classe UnitaImmob o RuleParser
 }
