@@ -40,85 +40,9 @@ public class Main {
         ArrayList<CategoriaSensore> listaCategoriaSensori = new ArrayList<>();
         RuleParser ruleParser = new RuleParser();
         int contatoreOperazioni = 0;
-    /*
-        CategoriaAttuatore cateAtt1 = new CategoriaAttuatore("cateAtt1", "testo");
-        CategoriaAttuatore cateAtt2 = new CategoriaAttuatore("cateAtt2", "testo");
-        ModalitaOperativa mod1 = new ModalitaOperativa("Acceso");
-        ModalitaOperativa mod2 = new ModalitaOperativa("Spento");
-        HashMap<String,Integer> params = new HashMap<>();
-        params.put("p1",10);
-        params.put("p2",20);
-        params.put("p3",30);
-        ModalitaOperativa modP = new ModalitaOperativa("parametrica",params);
 
-
-        cateAtt1.aggiungiModalitaOperativa(mod1);
-        cateAtt1.aggiungiModalitaOperativa(mod2);
-        cateAtt2.aggiungiModalitaOperativa(mod1);
-        cateAtt2.aggiungiModalitaOperativa(mod2);
-        cateAtt2.aggiungiModalitaOperativa(modP);
-
-        Attuatore att1 = new Attuatore("att1", cateAtt1, "Acceso", false);
-        Attuatore att2 = new Attuatore("att2", cateAtt2, "Spento", true);
-
-        CategoriaSensore cateSens1 = new CategoriaSensore("cateSens1", "testo", false);
-        CategoriaSensore cateSens2 = new CategoriaSensore("cateSens2", "testo", true);
-
-
-        ArrayList<Informazione> infos1 = new ArrayList<>();
-        infos1.add(new Informazione("misuraN", 50, 1));
-        infos1.add(mod1);
-        InformazioneNonNum infoNN = new InformazioneNonNum("infoNN");
-        ArrayList<String> domNN = new ArrayList<>();
-        domNN.add("Bona");
-        domNN.add("NonBona");
-        //domNN.add("asfasf");
-        //domNN.add("lol");
-        infoNN.setDominioNonNumerico(domNN);
-        infos1.add(infoNN);
-
-        ArrayList<Informazione> infos2 = new ArrayList<>();
-        infos2.add(new Informazione("misuraN2", 50, 1));
-        infos2.add(mod1);
-        InformazioneNonNum infoNN2 = new InformazioneNonNum("infoNN2");
-        ArrayList<String> domNN2 = new ArrayList<>();
-        domNN2.add("Boh");
-        domNN2.add("Trigger");
-        //domNN2.add("bomba");
-        infoNN2.setDominioNonNumerico(domNN2);
-        infos2.add(infoNN2);
-
-
-        cateSens1.setInfoRilevabili(infos1);
-        cateSens2.setInfoRilevabili(infos2);
-
-        Sensore s1 = new Sensore("s1", cateSens1);
-        Sensore s2 = new Sensore("s2", cateSens2);
-
-        listaAttuatori.add(att1);
-        listaAttuatori.add(att2);
-        listaSensori.add(s1);
-        listaSensori.add(s2);
-
-
-
-        RuleParser parser = new RuleParser("Regole.txt");
-
-        //LA PRIMA VARIABILE è NECESSARIAMENTE UN'INFORMAZIONE E NON UN VALORE COSTANTE NUMERICO o STRINGA
-        parser.writeRuleToFile("IF s1_cateSens1.infoNN = Bona OR s1_cateSens1.infoNN = NonBona THEN att1_cateAtt1 := Spento");
-
-
-        parser.writeRuleToFile("true AND false OR true THEN att2_cateAtt2 := parametrica|p44|40 , att1_cateAtt1 := Acceso");
-
-        String readRules = parser.readRuleFromFile();
-        String[] rules = readRules.split("\n");
-
-        System.out.println(rules[0]);
-        applyRules(listaSensori, listaAttuatori, rules);
-*/      //TODO: Togliere commenti o codice inutilizzato
-        //TODO: TESTARE A FONDO
         String operatore;
-        //TODO: Imporre semmai camelcase per input su nomenclatura -> possibile regex/pattern = [a-z]+(([A-Z][a-z])|[0-9])*
+
         do {
             do {
                 operatore = InputDati.leggiStringa("Selezionare il tipo di Utente(manutentore/fruitore) o FINE per uscire: ");
@@ -1210,7 +1134,6 @@ public class Main {
                             }
 
                             break;
-                        //TODO: Aggiungere visualizzazione regole dell'unita immob
                         case 4:
                             int sceltaVisualizza;
                             do {
@@ -1223,7 +1146,8 @@ public class Main {
 
 
                                 System.out.println("\n1) VISUALIZZA COMPOSIZIONE UNITA' IMMOBILIARE\n2) VISUALIZZA COMPOSIZIONE STANZE\n3) VISUALIZZA COMPOSIZIONE ARTEFATTI\n" +
-                                        "4) VISUALIZZA LISTA SENSORI E CATEGORIE SENSORI\n5) VISUALIZZA LISTA ATTUATORI E CATEGORIE ATTUATORI\n6) VISUALIZZA LISTA MODALITA' OPERATIVE\n0) USCITA");
+                                        "4) VISUALIZZA LISTA SENSORI E CATEGORIE SENSORI\n5) VISUALIZZA LISTA ATTUATORI E CATEGORIE ATTUATORI\n6) VISUALIZZA LISTA MODALITA' OPERATIVE\n" +
+                                        "7) VISUALIZZA REGOLE CREATE\n0) USCITA");
                                 sceltaVisualizza = InputDati.leggiIntero("### Seleziona funzionalità: ");
                                 switch (sceltaVisualizza) {
                                     case 1:
@@ -1301,6 +1225,17 @@ public class Main {
                                                 System.out.println("--- Nome modalità operativa: " + mod.toString());
                                         }
                                         break;
+
+                                    case 7:
+                                        System.out.println();
+                                        System.out.println("\n...REGOLE ATTUALMENTE CREATE PER QUESTA UNITA' IMMOBILIARE...");
+                                        String readRules = ruleParser.readRuleFromFile();
+
+                                        if (readRules.equals(""))
+                                            System.out.println("XX Non sono state definite regole per l'unita immobiliare selezionata XX\n");
+                                        else
+                                            System.out.println(readRules);
+                                        break;
                                     case 0:
                                         System.out.println("USCITA DALLA FUNZIONE DI VISUALIZZAZIONE\n");
                                         break;
@@ -1308,7 +1243,6 @@ public class Main {
                             } while (sceltaVisualizza != 0);
 
                             break;
-                        //TODO: Mettere semplice "true" nelle condizioni
                         case 5:
 
 
@@ -1352,124 +1286,150 @@ public class Main {
                                 do {
                                     nomeSensore = InputDati.leggiStringa("Inserisci il nome del sensore sul quale applicare la regola: ");
                                     for (Sensore sensore : unitaImmobiliare.getListaSensori()) {
-                                        if (sensore.getNome().equals(nomeSensore)) {
+                                        if (sensore.getNome().equals(nomeSensore) || nomeSensore.equals("true")) {
                                             siSens = true;
                                             break;
                                         }
                                     }
                                 } while (!siSens);
-
-                                for (Sensore s : unitaImmobiliare.getListaSensori()) {
-                                    if (s.getNome().equals(nomeSensore)) {
-                                        System.out.println("\n...INFORMAZIONI ATTUALMENTE CREATE DAL MANUTENTORE PER QUESTO SENSORE...");
-
-                                        for (Informazione info : s.getRilevazioni()) {
-                                            System.out.println("--- Nome informazione: " + info.getNome());
-                                        }
-                                        boolean siInfo = false;
-                                        String nomeInformazione;
-                                        do {
-                                            nomeInformazione = InputDati.leggiStringa("Inserisci il nome dell'informazione da utilizzare nella regola: ");
-                                            for (Informazione info : s.getRilevazioni()) {
-                                                if (info.getNome().equals(nomeInformazione)) {
-                                                    siInfo = true;
-                                                    break;
-                                                }
-                                            }
-                                        } while (!siInfo);
-                                        for (Informazione info : s.getRilevazioni()) {
-                                            if (info.getNome().equals(nomeInformazione)) {
-                                                dato1 = nomeSensore + "." + nomeInformazione;
-                                                if (info.getTipo().equals("NN")) {
-                                                    tipoDato = "NN";
-                                                    System.out.println("Informazione di tipo non numerico! E' consentita la sola operazione di ugualianza(=) tra una stringa o un sensore con info non numerica.");
-                                                    do {
-                                                        op = InputDati.leggiStringa("Inserisci il tipo di operazione da effettuare: ");
-                                                    } while (!op.equals("="));
-                                                } else {
-                                                    System.out.println("\nInformazione di tipo numerico! Operazioni consentite(con dato numerico o un altro sensore con info numerica):\n" +
-                                                            "Uguale(=), Maggiore(>), Minore(<), Maggiore-Uguale(>=), Minore-Uguale(<=)");
-                                                    do {
-                                                        op = InputDati.leggiStringa("Inserisci il tipo di operazione da effettuare: ");
-                                                    } while (!op.equals("=") && !op.equals(">") && !op.equals("<") && !op.equals(">=") && !op.equals("<="));
-                                                }
-                                                break;
-                                            }
-                                        }
-                                    }
-                                }
-                                regola += dato1 + " " + op + " ";
-                                boolean scelta = false;
-
-                                //TODO: Vedere semmai se si riesce a fare magari che NON vengano inseriti sensori di tipo diversi
-
-                                if (unitaImmobiliare.getListaSensori().size() > 1) {
-                                    scelta = InputDati.yesOrNo("Si vuole inserire una rilevazione di un sensore(S) o una costante numerica(N)?");
-                                }
-
-                                if (scelta) {
-                                    System.out.println("\n...SENSORI ATTUALMENTE CREATI DAL MANUTENTORE...");
-
+                                if(!nomeSensore.equals("true")) {
                                     for (Sensore s : unitaImmobiliare.getListaSensori()) {
-                                        if (s.getNome().equals(nomeSensore))
-                                            continue;
-                                        System.out.println("--- Nome sensore: " + s.getNome());
-                                    }
-
-                                    boolean siSenso = false;
-                                    String nomeSensor;
-                                    do {
-                                        nomeSensor = InputDati.leggiStringa("Inserisci il nome del sensore sul quale applicare la regola: ");
-                                        for (Sensore sensore : unitaImmobiliare.getListaSensori()) {
-                                            if (sensore.getNome().equals(nomeSensor)) {
-                                                siSenso = true;
-                                                break;
-                                            }
-                                        }
-                                    } while (!siSenso || nomeSensor.equals(nomeSensore));
-
-                                    for (Sensore s : unitaImmobiliare.getListaSensori()) {
-                                        if (s.getNome().equals(nomeSensor)) {
+                                        if (s.getNome().equals(nomeSensore)) {
                                             System.out.println("\n...INFORMAZIONI ATTUALMENTE CREATE DAL MANUTENTORE PER QUESTO SENSORE...");
 
                                             for (Informazione info : s.getRilevazioni()) {
                                                 System.out.println("--- Nome informazione: " + info.getNome());
                                             }
-
                                             boolean siInfo = false;
                                             String nomeInformazione;
-
                                             do {
                                                 nomeInformazione = InputDati.leggiStringa("Inserisci il nome dell'informazione da utilizzare nella regola: ");
                                                 for (Informazione info : s.getRilevazioni()) {
                                                     if (info.getNome().equals(nomeInformazione)) {
-                                                        dato2 = nomeSensor + "." + nomeInformazione;
                                                         siInfo = true;
                                                         break;
                                                     }
                                                 }
                                             } while (!siInfo);
+                                            for (Informazione info : s.getRilevazioni()) {
+                                                if (info.getNome().equals(nomeInformazione)) {
+                                                    dato1 = nomeSensore + "." + nomeInformazione;
+                                                    if (info.getTipo().equals("NN")) {
+                                                        tipoDato = "NN";
+                                                        System.out.println("Informazione di tipo non numerico! E' consentita la sola operazione di ugualianza(=) tra una stringa o un sensore con info non numerica.");
+                                                        do {
+                                                            op = InputDati.leggiStringa("Inserisci il tipo di operazione da effettuare: ");
+                                                        } while (!op.equals("="));
+                                                    } else {
+                                                        tipoDato = "N";
+                                                        System.out.println("\nInformazione di tipo numerico! Operazioni consentite(con dato numerico o un altro sensore con info numerica):\n" +
+                                                                "Uguale(=), Maggiore(>), Minore(<), Maggiore-Uguale(>=), Minore-Uguale(<=)");
+                                                        do {
+                                                            op = InputDati.leggiStringa("Inserisci il tipo di operazione da effettuare: ");
+                                                        } while (!op.equals("=") && !op.equals(">") && !op.equals("<") && !op.equals(">=") && !op.equals("<="));
+                                                    }
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    regola += dato1 + " " + op + " ";
+                                } else
+                                    regola += nomeSensore + " ";
 
-                                            proseguire = InputDati.yesOrNo("Si vuole aggiungere un'altra condizione per la seguente regola?");
-                                            if (proseguire) {
-                                                System.out.println("Operatori logici consentinti: AND, OR");
-                                                do {
-                                                    logico = InputDati.leggiStringa("Inserisci il tipo di operatore logico: ");
-                                                } while (!logico.equals("AND") && !logico.equals("OR"));
-                                                regola += dato2 + " " + logico + " ";
-                                            } else
-                                                regola += dato2 + " ";
+                                boolean scelta = false;
+
+                                if(!nomeSensore.equals("true")) {
+                                    if (unitaImmobiliare.getListaSensori().size() > 1) {
+                                        for(Sensore sens : unitaImmobiliare.getListaSensori()) {
+                                            if(!sens.getNome().equals(nomeSensore)) {
+                                                for(Informazione info : sens.getRilevazioni()) {
+                                                    if(info.getTipo().equals(tipoDato))
+                                                        scelta = InputDati.yesOrNo("Si vuole inserire una rilevazione di un sensore(S) o una costante numerica(N)?");
+                                                }
+                                            }
                                         }
                                     }
 
-                                } else {
-                                    if (tipoDato.equals("NN")) {
-                                        valoreNN = InputDati.leggiStringa("Inserisci la stringa da confrontare con la lettura del sensore non numerico: ");
-                                        regola += valoreNN + " ";
+                                    if (scelta) {
+                                        System.out.println("\n...SENSORI ATTUALMENTE CREATI DAL MANUTENTORE...");
+
+                                        for (Sensore s : unitaImmobiliare.getListaSensori()) {
+                                            if (s.getNome().equals(nomeSensore))
+                                                continue;
+                                            System.out.println("--- Nome sensore: " + s.getNome());
+                                        }
+
+                                        boolean siSenso = false;
+                                        String nomeSensor;
+                                        do {
+                                            nomeSensor = InputDati.leggiStringa("Inserisci il nome del sensore sul quale applicare la regola: ");
+                                            for (Sensore sensore : unitaImmobiliare.getListaSensori()) {
+                                                if (sensore.getNome().equals(nomeSensor)) {
+                                                    for(Informazione info : sensore.getRilevazioni()) {
+                                                        if(info.getTipo().equals(tipoDato)) {
+                                                            siSenso = true;
+                                                            break;
+                                                        }
+                                                    }
+                                                }
+                                                if(siSenso)
+                                                    break;
+                                            }
+                                        } while (!siSenso || nomeSensor.equals(nomeSensore));
+
+                                        for (Sensore s : unitaImmobiliare.getListaSensori()) {
+                                            if (s.getNome().equals(nomeSensor)) {
+                                                System.out.println("\n...INFORMAZIONI ATTUALMENTE CREATE DAL MANUTENTORE PER QUESTO SENSORE...");
+
+                                                for (Informazione info : s.getRilevazioni()) {
+                                                    System.out.println("--- Nome informazione: " + info.getNome());
+                                                }
+
+                                                boolean siInfo = false;
+                                                String nomeInformazione;
+
+                                                do {
+                                                    nomeInformazione = InputDati.leggiStringa("Inserisci il nome dell'informazione da utilizzare nella regola: ");
+                                                    for (Informazione info : s.getRilevazioni()) {
+                                                        if (info.getNome().equals(nomeInformazione) && tipoDato.equals(info.getTipo())) {
+                                                            dato2 = nomeSensor + "." + nomeInformazione;
+                                                            siInfo = true;
+                                                            break;
+                                                        }
+                                                    }
+                                                } while (!siInfo);
+
+                                                proseguire = InputDati.yesOrNo("Si vuole aggiungere un'altra condizione per la seguente regola?");
+                                                if (proseguire) {
+                                                    System.out.println("Operatori logici consentinti: AND, OR");
+                                                    do {
+                                                        logico = InputDati.leggiStringa("Inserisci il tipo di operatore logico: ");
+                                                    } while (!logico.equals("AND") && !logico.equals("OR"));
+                                                    regola += dato2 + " " + logico + " ";
+                                                } else
+                                                    regola += dato2 + " ";
+                                            }
+                                        }
+
                                     } else {
-                                        valore = InputDati.leggiIntero("Inserisci un valore numerico da confrontare con la lettura del sensore: ");
-                                        regola += valore + " ";
+                                        if (tipoDato.equals("NN")) {
+                                            valoreNN = InputDati.leggiStringa("Inserisci la stringa da confrontare con la lettura del sensore non numerico: ");
+                                            regola += valoreNN + " ";
+                                        } else {
+                                            valore = InputDati.leggiIntero("Inserisci un valore numerico da confrontare con la lettura del sensore: ");
+                                            regola += valore + " ";
+                                        }
+                                        proseguire = InputDati.yesOrNo("Si vuole aggiungere un'altra condizione per la seguente regola?");
+                                        if (proseguire) {
+                                            System.out.println("Operatori logici consentinti: AND, OR");
+                                            do {
+                                                logico = InputDati.leggiStringa("Inserisci il tipo di operatore logico: ");
+                                            } while (!logico.equals("AND") && !logico.equals("OR"));
+                                            regola += logico + " ";
+                                        }
                                     }
+                                } else {
                                     proseguire = InputDati.yesOrNo("Si vuole aggiungere un'altra condizione per la seguente regola?");
                                     if (proseguire) {
                                         System.out.println("Operatori logici consentinti: AND, OR");

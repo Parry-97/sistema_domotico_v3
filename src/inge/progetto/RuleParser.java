@@ -107,7 +107,7 @@ public class RuleParser {
         }
 
         if (actD == null)
-            return; //siccome abbiamo regole fatte di versioni precedenti...va bene cosi..gestito dal input
+            return;
 
         String modPrecedente = actD.getNome() + ": " + actD.getModalitaAttuale() + " -> ";
         if (toks[1].contains("|")) {
@@ -124,7 +124,6 @@ public class RuleParser {
 
     }
 
-    //IL CALCOLO DELLE REGOLE HA UN'ASSOCIAZIONE A DESTRA, oddddioooo, precendenza all'AND!
     private boolean calculate(String cos, ArrayList<Sensore> listaSensori) {
         if (cos.equals("true"))
             return true;

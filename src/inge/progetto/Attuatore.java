@@ -147,13 +147,6 @@ public class Attuatore {
      * @param valoreParametro setta il nuovo valore della modalità paramentrica inserita
      */
     public void setModalitaAttuale(String nuovaModalita, String nomeParametro, int valoreParametro) {
-        /*if (listaComandati.isEmpty()) {
-            System.out.println("XX L'attuatore non comanda alcun artefatto XX");
-            //return;
-        }
-
-         */
-
         if(this.modalitaAttuale.equals(nuovaModalita)) {
             System.out.println("Sei già in questa modalità");
         }

@@ -30,21 +30,18 @@ public class ModalitaOperativa extends Informazione
      * @param valore nome della modalit&agrave; operativa
      */
     public ModalitaOperativa(String valore) {
-        //ogni modalità si chiamera come tale e avranno un valore che equivale al nome della modalità operativa
-        //cosi da rendere la classe simile alla classe informazione
-        super("Modalita_Operativa");
+        super("modalitaOperativa");
         this.valore = valore;
-        super.setTipo("NN"); //Proviamo a metterlo tipo M prima l'avevo messo NN ma magari faceva confusione con InfoNonNUm
+        super.setTipo("NN");
         this.parametri = new HashMap<>();
     }
-
 
     /**Costruisce un istanza di modalit&agrave; operativa; in questo sar&agrave; una modalita operativa parametrica in quanto vengono definiti anche i
      * @param valore nome della modalit&agrave; operativa
      * @param parametri parametri da specificare nel caso la modalit&agrave; sia parametrica
      */
     public ModalitaOperativa(String valore, HashMap<String, Integer> parametri) {
-        super("Modalità_Operativa");
+        super("modalitàOperativa");
         this.valore = valore;
         this.parametri = parametri;
         super.setTipo("NN");
