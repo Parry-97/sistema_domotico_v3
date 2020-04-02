@@ -27,21 +27,24 @@ public class ModalitaOperativa extends Informazione
 
     /**Costruttore della classe
      * La modalit&agrave; operativa &egrave; non parametrica completamente specificata dal manutentore con nome
-     * @param nome nome della modalit&agrave; operativa
+     * @param valore nome della modalit&agrave; operativa
      */
-    public ModalitaOperativa(String nome) {
-        super(nome);
+    public ModalitaOperativa(String valore) {
+        super("modalitaOperativa");
+        this.valore = valore;
+        super.setTipo("NN");
         this.parametri = new HashMap<>();
     }
 
-
     /**Costruisce un istanza di modalit&agrave; operativa; in questo sar&agrave; una modalita operativa parametrica in quanto vengono definiti anche i
-     * @param nome nome della modalit&agrave; operativa
+     * @param valore nome della modalit&agrave; operativa
      * @param parametri parametri da specificare nel caso la modalit&agrave; sia parametrica
      */
-    public ModalitaOperativa(String nome, HashMap<String, Integer> parametri) {
-        super(nome);
+    public ModalitaOperativa(String valore, HashMap<String, Integer> parametri) {
+        super("modalitàOperativa");
+        this.valore = valore;
         this.parametri = parametri;
+        super.setTipo("NN");
     }
 
     /** Permette di modificare un parametro della modalità operativa
@@ -63,20 +66,25 @@ public class ModalitaOperativa extends Informazione
         System.out.println("*** Il parametro è stato impostato correttamente al nuovo valore ***");
     }
 
+    @Override
+    public String getValore() {
+        return (String) this.valore;
+    }
+
     /**
      * Fornisce una rappresentazione testuale che descrive brevemente l'istanza
      * @return stampa il toString della modalità operativa
      */
     @Override
     public String toString() {
-        StringBuilder out = new StringBuilder("Modalita Operativa: " + this.getNome());
+        StringBuilder out = new StringBuilder("Modalita Operativa: " + this.getValore());
         if (!this.parametri.isEmpty()) {
             out.append("\n### Parametri = ");
             for (String key : parametri.keySet()) {
                 out.append("...[ ").append(key).append(":").append(parametri.get(key)).append(" ]");
             }
         }
-        return String.valueOf(out);
+        return out.toString();
     }
 
     /**

@@ -11,8 +11,11 @@ import java.io.Serializable;
  */
 public class Informazione implements Serializable {
 
-    private String nome;
 
+    private String nome;
+    private String tipo;
+
+    protected Object valore;
 
     /**rappresentano il range/dominio entro cui cade il valore dell'informazione; hanno già dei
      * valori di default che possono poi essere modificati dal manutentore
@@ -26,6 +29,8 @@ public class Informazione implements Serializable {
      */
     public Informazione(String nome) {
         this.nome = nome;
+        this.tipo = "N";
+        aggiornaValore();
     }
 
     /** Costruttore per un oggetto di tipo {@link Informazione}
@@ -33,11 +38,12 @@ public class Informazione implements Serializable {
      * @param valoreMax valore massimo del range/dominio dell'informazione
      * @param valoreMin valore minimo del range/dominio dell'informazione
      */
-
     public Informazione(String nome, int valoreMax, int valoreMin) {
         this.nome = nome;
         this.VALORE_MAX = valoreMax;
         this.VALORE_MIN = valoreMin;
+        this.tipo="N";
+        this.aggiornaValore();
     }
 
     /**Permette di modificare estremo superiore del dominio in cui cade l'informazione
@@ -45,6 +51,7 @@ public class Informazione implements Serializable {
      */
     public void setVALORE_MAX(int VALORE_MAX) {
         this.VALORE_MAX = VALORE_MAX;
+        this.aggiornaValore();
     }
 
     /**Permette di modificare estremo inferiore del dominio in cui cade l'informazione
@@ -52,15 +59,19 @@ public class Informazione implements Serializable {
      */
     public void setVALORE_MIN(int VALORE_MIN) {
         this.VALORE_MIN = VALORE_MIN;
+        this.aggiornaValore();
     }
 
-    /**Fornisce la misura/valore dell'informazione, un valore casuale che cade entro il dominio specificato
+    /**Fornisce la misura/valore dell'informazione, un valore casuale numerico che cade entro il dominio specificato
      * @return valore numerico dell'informazione
      */
-    protected int getValore() {
-        return (int) (Math.random() * (this.VALORE_MAX - this.VALORE_MIN) + this.VALORE_MIN);
+    public void aggiornaValore() {
+        this.valore =  (int) (Math.random() * (this.VALORE_MAX - this.VALORE_MIN) + this.VALORE_MIN);
     }
 
+    public Object getValore(){
+        return this.valore;
+    }
     /**Fornisce estremo superiore del dominio in cui cade l'informazione
      * @return valore massimo possibile per l'informazione
      */
@@ -91,5 +102,13 @@ public class Informazione implements Serializable {
     @Override
     public String toString() {
         return "[" + this.nome + " : " + this.getValore() + "]";
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
     }
 }

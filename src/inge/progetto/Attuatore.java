@@ -120,22 +120,22 @@ public class Attuatore {
      */
     public void setModalitaAttuale(String nuovaModalita) {
         if(this.modalitaAttuale.equals(nuovaModalita)) {
-            System.out.println("Sei già in questa modalità");
+            System.out.println("*** Sei già in questa modalità ***");
             return;
         }
         for (ModalitaOperativa mod : this.getCategoria().getModalita()) {
-            if(mod.getNome().equals(nuovaModalita)) {
+            if(mod.getValore().equals(nuovaModalita)) {
                 this.modalitaAttuale = nuovaModalita;
 
 
 
                 modificaArtefatti(new ModalitaOperativa(nuovaModalita)); //conseguente cambiamento di stato degli artefatti comandati
 
-                System.out.println("*** Nuova modalità ***");
+                System.out.println("*** Modalità modificata correttamente ***");
                 return;
             }
         }
-        System.out.println("Questa modalità non esiste per questo attuatore");
+        System.out.println("!!! Questa modalità non esiste per questo attuatore !!!");
     }
 
     /** Specifica una nuova modalit&agrave; operativa per l'attuatore controllando prima
@@ -147,16 +147,11 @@ public class Attuatore {
      * @param valoreParametro setta il nuovo valore della modalità paramentrica inserita
      */
     public void setModalitaAttuale(String nuovaModalita, String nomeParametro, int valoreParametro) {
-        if (listaComandati.isEmpty()) {
-            System.out.println("XX L'attuatore non comanda alcun artefatto XX");
-            return;
-        }
-
         if(this.modalitaAttuale.equals(nuovaModalita)) {
             System.out.println("Sei già in questa modalità");
         }
         for (ModalitaOperativa mod : this.getCategoria().getModalita()) {
-            if(mod.getNome().equals(nuovaModalita)) {
+            if(mod.getValore().equals(nuovaModalita)) {
                 this.modalitaAttuale = nuovaModalita;
 
                 HashMap<String, Integer> nuoviParam = (HashMap<String, Integer>) mod.getParametri().clone();

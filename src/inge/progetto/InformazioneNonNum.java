@@ -28,6 +28,7 @@ public class InformazioneNonNum extends Informazione
     public InformazioneNonNum(String nome) {
         super(nome);
         this.dominioNonNumerico = new ArrayList<>();
+        super.setTipo("NN");
     }
 
     /**
@@ -37,15 +38,34 @@ public class InformazioneNonNum extends Informazione
      */
     public InformazioneNonNum(String nome, ArrayList<String> dominioNonNumerico) {
         super(nome);
+        super.setTipo("NN");
         this.dominioNonNumerico = dominioNonNumerico;
         super.setVALORE_MAX(dominioNonNumerico.size());
+        aggiornaValore();
     }
+
+    public void setDominioNonNumerico(ArrayList<String> dominioNonNumerico) {
+        this.dominioNonNumerico = dominioNonNumerico;
+        super.setVALORE_MAX(dominioNonNumerico.size());
+        aggiornaValore();
+    }
+
+    @Override
+    public void aggiornaValore() {
+        super.aggiornaValore();
+    }
+
+    @Override
+    public String getValore() {
+        return  this.dominioNonNumerico.get((Integer) super.getValore());
+    }
+
     /**
      * Fornisce una rappresentazione testuale che descrive l'informazione
      * @return una stringa descrittiva dell'istanza
      */
     @Override
     public String toString() {
-        return "[ Nome informazione: " + super.getNome() + " | Rilevazione: " + this.dominioNonNumerico.get(super.getValore()) + " ]";
+        return "[ Nome informazione: " + super.getNome() + " | Rilevazione: " + this.getValore() + " ]";
     }
 }

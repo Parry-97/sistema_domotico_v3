@@ -102,6 +102,23 @@ public class Sensore {
             rilevazioni.set(rilevazioni.indexOf(info1),info2);
     }
 
+    public Informazione getInformazione(String nome) {
+        for (Informazione info : this.rilevazioni) {
+            if (info.getNome().equals(nome))
+                return info;
+        }
+
+        return null;
+    }
+
+    public void aggiornaInfo(){
+        for (Informazione info : this.rilevazioni) {
+            if (info.getTipo().equals("M"))
+                continue;
+            info.aggiornaValore();
+        }
+    }
+
     /**
      *
      * @return una rappresentazione descrittiva in formato testuale di un sensore
@@ -110,7 +127,7 @@ public class Sensore {
     public String toString() {
         String visualizza ="Nome sensore: " + this.getNome() + ", rilevazioni effettuate:\n";
         for(Informazione info : this.getRilevazioni()) {
-            if(!info.getNome().equals("STATO"))
+            if(!info.getNome().equals("Modalità Operativa"))
                 visualizza += info.getNome() + info.getValore();
         }
         return  visualizza;

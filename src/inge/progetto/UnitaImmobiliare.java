@@ -23,6 +23,16 @@ public class UnitaImmobiliare {
     private ArrayList<Artefatto> listaArtefatti;
 
     /**
+     * insieme di attuatori contenuti nell'unit&agrave; immobiliare
+     */
+    private ArrayList<Attuatore> listaAttuatori;
+
+    /**
+     * insieme di sensori contenuti nell'unit&agrave; immobiliare
+     */
+    private ArrayList<Sensore> listaSensori;
+
+    /**
      * tipo/destinazione d'uso dell'unit&agrave; immobiliare
      */
     private String tipo;
@@ -37,6 +47,8 @@ public class UnitaImmobiliare {
 
         this.listaArtefatti = new ArrayList<>();
         this.listaStanze = new ArrayList<>();
+        this.listaSensori = new ArrayList<>();
+        this.listaAttuatori = new ArrayList<>();
         this.nome = nome;
         this.tipo = tipo;
     }
@@ -46,6 +58,8 @@ public class UnitaImmobiliare {
      */
     public UnitaImmobiliare() {
         this.tipo = "";
+        this.listaSensori = new ArrayList<>();
+        this.listaAttuatori = new ArrayList<>();
     }
 
     /**Permette di ottenere lista/insieme di stanze nell'unit&agrave; immobiliare
@@ -91,6 +105,30 @@ public class UnitaImmobiliare {
         this.tipo = tipo;
     }
 
+    public ArrayList<Attuatore> getListaAttuatori() {
+        return listaAttuatori;
+    }
+    /**Permette di specificare lista/insieme di attuatori di cui &egrave; costituita l'unit&agrave; immobiliare
+     * @param listaAttuatori lista di attuatori da assegnare agli artefatti dell'untita' immobiliare
+     */
+    public void setListaAttuatori(ArrayList<Attuatore> listaAttuatori) {
+        this.listaAttuatori = listaAttuatori;
+    }
+
+    /**Permette di ottenere lista/insieme di sensori nell'unit&agrave; immobiliare
+     * @return lista di tutti i sensori presenti nell'unit&agrave; immobiliare
+     */
+    public ArrayList<Sensore> getListaSensori() {
+        return listaSensori;
+    }
+
+    /**Permette di specificare lista/insieme di sensori di cui &egrave; costituita l'unit&agrave; immobiliare
+     * @param listaSensori lista di sensori da assegnare agli artefatti o alle stanze dell'untita' immobiliare
+     */
+    public void setListaSensori(ArrayList<Sensore> listaSensori) {
+        this.listaSensori = listaSensori;
+    }
+
     /**Permette di specificare una nuova stanza da aggiungere all'unit&agrave; immobiliare
      * @param s nuova stanza da aggiungere all'unit&agrave; immobiliare
      */
@@ -120,24 +158,65 @@ public class UnitaImmobiliare {
 
     }
 
+    public void aggiungiAttuatore(Attuatore a) {
+        for (Attuatore attuatore : listaAttuatori) {
+            if (attuatore.getNome().equals(a.getNome())) {
+                System.out.println("!!! Un attuatore " + a.getNome() + " è già presente !!!");
+                return;
+            }
+        }
+        listaAttuatori.add(a);
+        System.out.println("*** L'attuatore " + a.getNome() + " è stato correttamente aggiunto ***");
+    }
+
+    /**Permette di specificare un nuovo sensore da aggiungere all'unit&agrave; immobiliare
+     * @param s nuovo sensore da aggiungere ad un artefatto o ad una stanza
+     */
+    public void aggiungiSensore(Sensore s) {
+        for (Sensore sensore : listaSensori) {
+            if (sensore.getNome().equals(s.getNome())) {
+                System.out.println("!!! Un sensore " + s.getNome() + " è già presente !!!");
+                return;
+            }
+        }
+        listaSensori.add(s);
+        System.out.println("*** Il sensore " + s.getNome() + " è stato correttamente aggiunto ***");
+    }
+
     /**Fornisce una rappresentazione testuale che descrive complessivamente l'unit&agrave; immobiliare, le stanze e gli artefatti in essa contenuti.
      * @return stringa descrittiva dell'intera unit&agrave; immobiliare
      */
-    public String visualizzaDescrizione() {
-        String visualizza = "\n§ Tipo unità immobiliare: " + this.getTipo() + ", è costituita dalle seguenti stanze:\n";
 
+    public String visualizzaDescrizione() {
+        StringBuilder visualizza = new StringBuilder("\n§ Tipo unità immobiliare: " + this.getTipo() + ", è costituita dalle seguenti stanze:\n");
+
+        StringBuilder visStanze = new StringBuilder();
         for (Stanza stanza : listaStanze) {
-            visualizza += stanza.visualizzaDisposizione();
+            visStanze.append(stanza.visualizzaDisposizione());
         }
 
-        visualizza += "\n\n§ Artefatti esterni all'unità immobiliare:\n";
+        if (visStanze.length() > 0)
+            visualizza.append(visStanze);
+        else
+            visualizza.append("XX Non sono state aggiunte all'unità immobiliare XX");
+
+        visualizza.append("\n\n§ Artefatti esterni all'unità immobiliare:\n");
+
+        StringBuilder visArte = new StringBuilder();
+
         for(Stanza stanza : listaStanze) {
             for (Artefatto artefatto : listaArtefatti) {
                 if(!stanza.getListaArtefatti().contains(artefatto))
-                    visualizza += artefatto.visualizzaDispositivi();
+                    visArte.append(artefatto.visualizzaDispositivi());
             }
         }
-        return visualizza;
+
+        if (visArte.length() > 0)
+            visualizza.append(visArte);
+        else
+            visualizza.append("XX Non sono presenti artefatti esterni all'unità immobiliare XX");
+
+        return visualizza.toString();
     }
 
     /**Fornisce il nome dell'unit&agrave; immobiliare
@@ -146,4 +225,13 @@ public class UnitaImmobiliare {
     public String getNome() {
         return nome;
     }
+
+    public void refreshLetture() {
+        if(listaSensori.isEmpty())
+            return;
+        for (Sensore s : listaSensori)
+            s.aggiornaInfo();
+
+    }
+
 }
