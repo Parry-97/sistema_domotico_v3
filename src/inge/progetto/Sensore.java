@@ -127,7 +127,6 @@ public class Sensore {
     public String toString() {
         String visualizza ="Nome sensore: " + this.getNome() + ", rilevazioni effettuate:\n";
         for(Informazione info : this.getRilevazioni()) {
-            //TODO: Chiedere a Mattia perche c'è sto if
             if(!info.getNome().equals("modalitàOperativa"))
                 visualizza += info.getNome() + info.getValore();
         }

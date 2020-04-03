@@ -184,7 +184,6 @@ public class RuleParser {
 
             return evalOp(operator, value, num);
         }
-        //TODO: Pushare regex
         if (var2.matches("[A-Za-z]([a-zA-Z0-9])*_[A-Za-z]([a-zA-Z0-9])+\\.([a-zA-Z0-9])+(_[A-Za-z][a-zA-Z0-9]*)*")) {
             String[] sensVar2 = var2.split("\\.");
             Sensore sens2 = null;
