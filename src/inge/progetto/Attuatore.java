@@ -96,6 +96,12 @@ public class Attuatore {
      */
     public void aggiungiArtefatto(Artefatto art) {
         listaComandati.add(art);
+        for (ModalitaOperativa m: this.categoria.getModalita()) {
+            if (m.getValore().equals(modalitaAttuale)) {
+                art.setStatoAttuale(m); //l'attuatore impone la sua volontà sull'/all'artefatto
+                break;
+            }
+        }
     }
 
     /**Permette di specificare la lista di artefatti che si desiderano comandare attraverso l'attuatore
@@ -147,13 +153,6 @@ public class Attuatore {
      * @param valoreParametro setta il nuovo valore della modalità paramentrica inserita
      */
     public void setModalitaAttuale(String nuovaModalita, String nomeParametro, int valoreParametro) {
-        /*if (listaComandati.isEmpty()) {
-            System.out.println("XX L'attuatore non comanda alcun artefatto XX");
-            //return;
-        }
-
-         */
-
         if(this.modalitaAttuale.equals(nuovaModalita)) {
             System.out.println("Sei già in questa modalità");
         }

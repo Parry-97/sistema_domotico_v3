@@ -13,9 +13,8 @@ public class Informazione implements Serializable {
 
 
     private String nome;
-    private String tipo; //nuova aggiunta per capire che tipo di info si tratta
+    private String tipo;
 
-    //valore stabile dell'informazione/misura
     protected Object valore;
 
     /**rappresentano il range/dominio entro cui cade il valore dell'informazione; hanno già dei

@@ -8,6 +8,10 @@ public class RuleParser {
     private String fileName;
 
 
+    public RuleParser(String fileName) {
+        this.fileName = fileName;
+    }
+
     public RuleParser() {
         this.fileName = "";
     }
@@ -103,7 +107,7 @@ public class RuleParser {
         }
 
         if (actD == null)
-            return; //siccome abbiamo regole fatte di versioni precedenti...va bene cosi..gestito dal input
+            return;
 
         String modPrecedente = actD.getNome() + ": " + actD.getModalitaAttuale() + " -> ";
         if (toks[1].contains("|")) {
@@ -120,7 +124,6 @@ public class RuleParser {
 
     }
 
-    //IL CALCOLO DELLE REGOLE HA UN'ASSOCIAZIONE A DESTRA, oddddioooo, precendenza all'AND!
     private boolean calculate(String cos, ArrayList<Sensore> listaSensori) {
         if (cos.equals("true"))
             return true;
@@ -166,7 +169,6 @@ public class RuleParser {
         Informazione misura1 = sens1.getInformazione(sensVar[1]);
 
         if (misura1 == null) {
-            System.out.println("Misura s1 non trovata");
             return false;
         }
 
@@ -182,8 +184,7 @@ public class RuleParser {
 
             return evalOp(operator, value, num);
         }
-
-        if (var2.matches("[A-Za-z]([a-zA-Z]|[0-9])*_[A-Za-z]([a-zA-Z]|[0-9])+\\.([a-zA-Z]|[0-9])+(_([a-zA-Z]|[0-9]))*")) {
+        if (var2.matches("[A-Za-z]([a-zA-Z0-9])*_[A-Za-z]([a-zA-Z0-9])+\\.([a-zA-Z0-9])+(_[A-Za-z][a-zA-Z0-9]*)*")) {
             String[] sensVar2 = var2.split("\\.");
             Sensore sens2 = null;
 
