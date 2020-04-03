@@ -119,6 +119,7 @@ public class Sensore {
         }
     }
 
+
     /**
      *
      * @return una rappresentazione descrittiva in formato testuale di un sensore

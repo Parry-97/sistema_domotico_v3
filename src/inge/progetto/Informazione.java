@@ -54,6 +54,10 @@ public class Informazione implements Serializable {
         this.aggiornaValore();
     }
 
+    public void setValore(Object valore) {
+        this.valore = valore;
+    }
+
     /**Permette di modificare estremo inferiore del dominio in cui cade l'informazione
      * @param VALORE_MIN nuovo valore minimo possibile per l'informazione
      */
