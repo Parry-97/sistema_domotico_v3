@@ -86,7 +86,7 @@ public class Sensore {
      * @param rilevazione nuova informazione che il sensore rileva
      * @see Informazione
      */
-    public void setRilevazione(Informazione  rilevazione) {
+    public void setRilevazione(Informazione rilevazione) {
 
         if(this.categoria.isFisico())
             System.out.println("Non è possibile alterare le rilevazioni del sensore! \n");
@@ -113,7 +113,7 @@ public class Sensore {
 
     public void aggiornaInfo(){
         for (Informazione info : this.rilevazioni) {
-            if (info.getTipo().equals("M"))
+            if (info instanceof ModalitaOperativa)
                 continue;
             info.aggiornaValore();
         }
@@ -127,7 +127,8 @@ public class Sensore {
     public String toString() {
         String visualizza ="Nome sensore: " + this.getNome() + ", rilevazioni effettuate:\n";
         for(Informazione info : this.getRilevazioni()) {
-            if(!info.getNome().equals("Modalità Operativa"))
+            //TODO: Chiedere a Mattia perche c'è sto if
+            if(!info.getNome().equals("modalitàOperativa"))
                 visualizza += info.getNome() + info.getValore();
         }
         return  visualizza;

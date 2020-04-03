@@ -96,6 +96,12 @@ public class Attuatore {
      */
     public void aggiungiArtefatto(Artefatto art) {
         listaComandati.add(art);
+        for (ModalitaOperativa m: this.categoria.getModalita()) {
+            if (m.getValore().equals(modalitaAttuale)) {
+                art.setStatoAttuale(m); //l'attuatore impone la sua volontà sull'/all'artefatto
+                break;
+            }
+        }
     }
 
     /**Permette di specificare la lista di artefatti che si desiderano comandare attraverso l'attuatore

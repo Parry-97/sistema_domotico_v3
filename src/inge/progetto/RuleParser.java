@@ -169,7 +169,6 @@ public class RuleParser {
         Informazione misura1 = sens1.getInformazione(sensVar[1]);
 
         if (misura1 == null) {
-            System.out.println("Misura s1 non trovata");
             return false;
         }
 
@@ -185,8 +184,8 @@ public class RuleParser {
 
             return evalOp(operator, value, num);
         }
-
-        if (var2.matches("[A-Za-z]([a-zA-Z]|[0-9])*_[A-Za-z]([a-zA-Z]|[0-9])+\\.([a-zA-Z]|[0-9])+")) {
+        //TODO: Pushare regex
+        if (var2.matches("[A-Za-z]([a-zA-Z0-9])*_[A-Za-z]([a-zA-Z0-9])+\\.([a-zA-Z0-9])+(_[A-Za-z][a-zA-Z0-9]*)*")) {
             String[] sensVar2 = var2.split("\\.");
             Sensore sens2 = null;
 
