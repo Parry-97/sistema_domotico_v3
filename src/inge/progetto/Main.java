@@ -101,9 +101,6 @@ public class Main {
         listaSensori.add(s2);
 
 
-
-        RuleParser parser = new RuleParser("Regole.txt");
-
         //LA PRIMA VARIABILE è NECESSARIAMENTE UN'INFORMAZIONE E NON UN VALORE COSTANTE NUMERICO o STRINGA
         parser.writeRuleToFile("IF s1_cateSens1.infoNN = Bona OR s1_cateSens1.infoNN = NonBona THEN att1_cateAtt1 := Spento");
 

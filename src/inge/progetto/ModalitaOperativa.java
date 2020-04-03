@@ -40,7 +40,7 @@ public class ModalitaOperativa extends Informazione
 
 
     /**Costruisce un istanza di modalit&agrave; operativa; in questo sar&agrave; una modalita operativa parametrica in quanto vengono definiti anche i
-     * @param valore nome della modalit&agrave; operativa
+     * @param valore nome/valore della modalit&agrave; operativa
      * @param parametri parametri da specificare nel caso la modalit&agrave; sia parametrica
      */
     public ModalitaOperativa(String valore, HashMap<String, Integer> parametri) {
