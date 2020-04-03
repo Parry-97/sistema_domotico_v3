@@ -98,7 +98,7 @@ public class Attuatore {
         listaComandati.add(art);
         for (ModalitaOperativa m: this.categoria.getModalita()) {
             if (m.getValore().equals(modalitaAttuale)) {
-                art.setStatoAttuale(m); //l'attuatore impone la sua volontà sull'/all'artefatto
+                art.setStatoAttuale(m);
                 break;
             }
         }

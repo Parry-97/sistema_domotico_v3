@@ -27,7 +27,7 @@ public class ModalitaOperativa extends Informazione
 
     /**Costruttore della classe
      * La modalit&agrave; operativa &egrave; non parametrica completamente specificata dal manutentore con nome
-     * @param valore nome della modalit&agrave; operativa
+     * @param valore nome/valore della modalit&agrave; operativa
      */
     public ModalitaOperativa(String valore) {
         super("modalitaOperativa");
