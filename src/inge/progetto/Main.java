@@ -1568,6 +1568,13 @@ public class Main {
 
     }
 
+    /**
+     *
+     * @param filename ripristina la lista delle categorie di sensori e attuatori che sono state create e salvate nelle precedenti operazioni da
+     *                 parte del manutentore. Inoltre vengono ripristinate anche le modalità operative che sono state realizzate, sia quelle vincolate alle
+     *                 categorie di attuatori e anche le modalità non ancora assegante ad una categoria perchè, magari, non è ancora stata realizzata.
+     * @return Rispristina le liste di categoria sensori e attuatori e la lista delle modalità operative.
+     */
     private static <T> ArrayList<T> ripristina(String filename) {
         FileInputStream in;
         ArrayList<T> list = new ArrayList<>();
@@ -1584,6 +1591,13 @@ public class Main {
         return list;
     }
 
+    /**
+     *
+     * @param filename salva la lista delle categorie di sensori e attuatori che sono state create da
+     *                 parte del manutentore. Inoltre vengono salvate anche le modalità operative che sono state realizzate, sia quelle vincolate alle
+     *                 categorie di attuatori e anche le modalità non ancora assegante ad una categoria perchè, magari, non è ancora stata realizzata.
+     * @return Salva le liste di categoria sensori e attuatori e la lista delle modalità operative.
+     */
     public static <T> void salva(ArrayList<T> list, String filename) {
 
         try {
