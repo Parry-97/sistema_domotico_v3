@@ -123,9 +123,10 @@ public class Sensore {
      *
      * Viene effettuata un aggiornamento dei dati letti da parte dei sensori.
      */
+
     public void aggiornaInfo(){
         for (Informazione info : this.rilevazioni) {
-            if (info.getTipo().equals("M"))
+            if (info instanceof ModalitaOperativa)
                 continue;
             info.aggiornaValore();
         }
