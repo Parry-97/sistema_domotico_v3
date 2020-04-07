@@ -123,6 +123,7 @@ public class Sensore {
      *
      * Viene effettuata un aggiornamento dei dati letti da parte dei sensori.
      */
+
     public void aggiornaInfo(){
         for (Informazione info : this.rilevazioni) {
             if (info instanceof ModalitaOperativa)

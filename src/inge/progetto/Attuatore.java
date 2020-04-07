@@ -103,7 +103,6 @@ public class Attuatore {
             }
         }
     }
-
     /**Permette di specificare la lista di artefatti che si desiderano comandare attraverso l'attuatore
      * @param listaComandati nuova lista di artefatti comandati dall'attuatore
      */
