@@ -40,7 +40,7 @@ public class Sensore {
     public Sensore(String nome, CategoriaSensore categoria) {
         this.nome = nome + "_" + categoria.getNome();
         this.categoria = categoria;
-        this.rilevazioni = categoria.getInfoRilevabili();
+        this.rilevazioni = categoria.getCopiaInfoRilevabili();
         this.statoAttivazione = true;
         this.connesso = false;
     }

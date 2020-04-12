@@ -45,6 +45,8 @@ public class CategoriaSensore implements Serializable {
         this.nome = nome;
         this.testolibero = testolibero;
         this.fisico = fisico;
+        infoRilevabili = new ArrayList<>();
+
     }
 
     /**Costruttore per la specifica di un oggetto di tipo CategoriaSensore
@@ -95,6 +97,22 @@ public class CategoriaSensore implements Serializable {
      */
     public ArrayList<Informazione> getInfoRilevabili() {
         return infoRilevabili;
+    }
+
+    public ArrayList<Informazione> getCopiaInfoRilevabili() {
+        ArrayList<Informazione> newInfos = new ArrayList<>();
+
+        for (Informazione info : this.infoRilevabili) {
+            try {
+
+                Informazione newInfo = (Informazione) info.clone();
+                newInfos.add(newInfo);
+
+            } catch (CloneNotSupportedException e) {
+                e.printStackTrace();
+            }
+        }
+        return newInfos;
     }
 
     /**Permette di specificare il tipo di informazione rilevabile da sensori della stessa categoria
