@@ -68,4 +68,11 @@ public class InformazioneNonNum extends Informazione
     public String toString() {
         return "[ Nome informazione: " + super.getNome() + " | Rilevazione: " + this.getValore() + " ]";
     }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        InformazioneNonNum cloned = (InformazioneNonNum) super.clone();
+        cloned.setDominioNonNumerico(this.dominioNonNumerico);
+        return cloned;
+    }
 }
