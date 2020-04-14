@@ -233,6 +233,9 @@ public class UnitaImmobiliare {
         return nome;
     }
 
+    /**
+     * Vengono aggiornate le letture di tutti i sensori dell'unità immobiliare.
+     */
     public void refreshLetture() {
         if(listaSensori.isEmpty())
             return;

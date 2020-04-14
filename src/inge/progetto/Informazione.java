@@ -11,7 +11,9 @@ import java.io.Serializable;
  */
 public class Informazione implements Serializable {
 
-
+    /**
+     * nome dell'informazione che il sensore acquisisce.
+     */
     private String nome;
 
     /**
