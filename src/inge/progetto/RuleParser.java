@@ -3,23 +3,38 @@ package inge.progetto;
 import java.io.*;
 import java.util.ArrayList;
 
+/**
+ * Classe di utility usata per le varie operazioni di gestione delle regole, che esse vengano importate o generate interattivamente da un utente.
+ * Si occupa di salvataggio permanente delle regole o di ripristino/lettura da file per l'utente che interagisce con i vari componenti del sistema come unita immobiliari o dispositivi
+ * come sensori o attuatori . Inoltre è possibile anche importare infatti regole da file esterni purchè queste siano compatibili con la descrizione
+ * precedentemente fornita del sistema e che rispettino la grammatica e sintassi del sistema.
+ * Svolge appunto la funzione di parsing, ovvero traduce il formato testuale delle regole assegnate/inserite dall'utente in comandi o azioni con le
+ * quali modifica la configurazione di una determinata unita immobiliare agendo su singoli sensori e attuatori in essa presenti.
+ *
+ * @author Parampal Singh, Mattia Nodari
+ */
 public class RuleParser {
 
+    /** nome file contenente le regole di un'unità immobiliare*/
     private String fileName;
 
-
-    public RuleParser(String fileName) {
-        this.fileName = fileName;
-    }
-
+    /**
+     * Costruttore di un'istanza RuleParser
+     */
     public RuleParser() {
         this.fileName = "";
     }
 
+    /**Specifica il percorso del file di testo con cui lavorare
+     * @param fileName percorso del file
+     */
     public void setFileName(String fileName) {
         this.fileName = fileName;
     }
 
+    /**Permette la scrittura di regola/e nel file dal percorso specficato in modo da salvare permanentemente
+     * @param text regola/e che si desiderano salvare
+     */
     public void writeRuleToFile(String text) {
         if (fileName.isEmpty())
             return;
@@ -148,7 +163,7 @@ public class RuleParser {
      * gli operatori logici di AND e OR.
      * @param cos è la condizione affinchè una regola si verifichi.
      * @param listaSensori dell'unità immobiliare sulla quale si stanno effettuando le operazioni
-     * @return
+     * @return il risultato di una determinata espressione booleana/antecedente
      */
     private boolean calculate(String cos, ArrayList<Sensore> listaSensori) {
         if (cos.equals("true"))
@@ -174,9 +189,11 @@ public class RuleParser {
     }
 
     /**
-     *Il metodo viene usato per acquisire i valori dei sensori in gioco e per confrontare l'effettiva operazione tra due sensori o tra un sensore e un valore numerico costante
-     * o un astringa nel caso di un'informazione non numerica
+     * Il metodo viene usato per acquisire i valori dei sensori in gioco e per confrontare l'effettiva operazione tra due sensori o tra un sensore e un valore numerico costante
+     * o una stringa nel caso di un'informazione non numerica
+     *
      * @param listaSensori dell'unità immobiliare sulla quale si stanno effettuando le operazioni
+     * @param toks componenti dell'espressione da valutare
      * @return il risultato dell'operazione in termini di true se le operazioni sono verificate altrimenti false se sono false
      */
     private boolean getValExp(String[] toks, ArrayList<Sensore> listaSensori) {

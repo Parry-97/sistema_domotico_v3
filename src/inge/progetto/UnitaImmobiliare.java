@@ -158,6 +158,9 @@ public class UnitaImmobiliare {
 
     }
 
+    /**Aggiunge un {@link Attuatore} all'unita immobiliare
+     * @param a attuatore da aggiungere
+     */
     public void aggiungiAttuatore(Attuatore a) {
         for (Attuatore attuatore : listaAttuatori) {
             if (attuatore.getNome().equals(a.getNome())) {
@@ -186,7 +189,6 @@ public class UnitaImmobiliare {
     /**Fornisce una rappresentazione testuale che descrive complessivamente l'unit&agrave; immobiliare, le stanze e gli artefatti in essa contenuti.
      * @return stringa descrittiva dell'intera unit&agrave; immobiliare
      */
-
     public String visualizzaDescrizione() {
         StringBuilder visualizza = new StringBuilder("\n§ Tipo unità immobiliare: " + this.getTipo() + ", è costituita dalle seguenti stanze:\n");
 

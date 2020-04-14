@@ -58,10 +58,6 @@ public class Informazione implements Serializable {
         this.aggiornaValore();
     }
 
-    public void setValore(Object valore) {
-        this.valore = valore;
-    }
-
     /**Permette di modificare estremo inferiore del dominio in cui cade l'informazione
      * @param VALORE_MIN nuovo valore minimo possibile per l'informazione
      */
@@ -70,16 +66,20 @@ public class Informazione implements Serializable {
         this.aggiornaValore();
     }
 
-    /**Fornisce la misura/valore dell'informazione, un valore casuale numerico che cade entro il dominio specificato
-     * @return valore numerico dell'informazione
+    /**
+     * Aggiorna  la misura/valore dell'informazione, un valore casuale numerico che cade entro il dominio specificato
      */
     public void aggiornaValore() {
         this.valore =  (int) (Math.random() * (this.VALORE_MAX - this.VALORE_MIN) + this.VALORE_MIN);
     }
 
+    /**Fornisce la misura/valore dell'informazione
+     * @return valore numerico dell'informazione
+     */
     public Object getValore(){
         return this.valore;
     }
+
     /**Fornisce estremo superiore del dominio in cui cade l'informazione
      * @return valore massimo possibile per l'informazione
      */
@@ -107,6 +107,9 @@ public class Informazione implements Serializable {
         this.nome = nome;
     }
 
+    /**Permette di modificare il valore assunto dall'informazione
+     * @param valore  nuovo valore da assegnare all'informazione
+     */
     public void setValore(Object valore) {
         this.valore = valore;
     }
@@ -116,10 +119,16 @@ public class Informazione implements Serializable {
         return "[" + this.nome + " : " + this.getValore() + "]";
     }
 
+    /**Fornisce il tipo dell'informazione
+     * @return N se numerica, NN se non numerica
+     */
     public String getTipo() {
         return tipo;
     }
 
+    /**Permette di specificare il tipo dell'informazione
+     * @param tipo tipo dell'informazione
+     */
     public void setTipo(String tipo) {
         this.tipo = tipo;
     }

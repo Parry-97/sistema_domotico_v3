@@ -29,8 +29,9 @@ public class Attuatore {
     private ArrayList<Artefatto> listaComandati;
 
     /**
-     *  categoria a cui appartiene l'attuatore
-     *  @see CategoriaAttuatore
+     * categoria a cui appartiene l'attuatore
+     *
+     * @see CategoriaAttuatore
      */
     private CategoriaAttuatore categoria;
 
@@ -55,28 +56,36 @@ public class Attuatore {
         listaComandati = new ArrayList<>();
     }
 
-    /**Fornisce il nome dell'attuatpre
-     * @return  nome dell'attuatore
+    /**
+     * Fornisce il nome dell'attuatpre
+     *
+     * @return nome dell'attuatore
      */
     public String getNome() {
         return nome;
     }
 
-    /**Permette di modificare il nome dell'attuatore
+    /**
+     * Permette di modificare il nome dell'attuatore
+     *
      * @param nome nuovo nome da assegnare all'attuatore
      */
     public void setNome(String nome) {
         this.nome = nome;
     }
 
-    /**Permette di ottenere la categoria a cui appartiene l'attuatore
+    /**
+     * Permette di ottenere la categoria a cui appartiene l'attuatore
+     *
      * @return la categoria a cui appartiene l'attuatore
      */
     public CategoriaAttuatore getCategoria() {
         return categoria;
     }
 
-    /**Permette di specificare/modificare la  a cui appartiene l'attuatore
+    /**
+     * Permette di specificare/modificare la  a cui appartiene l'attuatore
+     *
      * @param categoria categoria di attuatore da assegnare
      */
     public void setCategoria(CategoriaAttuatore categoria) {
@@ -84,47 +93,57 @@ public class Attuatore {
     }
 
 
-    /**Permette di ottenere la lista degli artefatti comandati dall'attuatore
+    /**
+     * Permette di ottenere la lista degli artefatti comandati dall'attuatore
+     *
      * @return la lista degli artefatti comandati dall'attuatore
      */
     public ArrayList<Artefatto> getListaComandati() {
         return listaComandati;
     }
 
-    /**Aggiunge l'artefatto alla lista degli artefatti comandati dall'attuatore
+    /**
+     * Aggiunge l'artefatto alla lista degli artefatti comandati dall'attuatore
+     *
      * @param art nuovo artefatto che si desidera comandare attraverso l'attuatore
      */
     public void aggiungiArtefatto(Artefatto art) {
         listaComandati.add(art);
-        for (ModalitaOperativa m: this.categoria.getModalita()) {
+        for (ModalitaOperativa m : this.categoria.getModalita()) {
             if (m.getValore().equals(modalitaAttuale)) {
                 art.setStatoAttuale(m);
                 break;
             }
         }
     }
-    /**Permette di specificare la lista di artefatti che si desiderano comandare attraverso l'attuatore
+
+    /**
+     * Permette di specificare la lista di artefatti che si desiderano comandare attraverso l'attuatore
+     *
      * @param listaComandati nuova lista di artefatti comandati dall'attuatore
      */
     public void setListaComandati(ArrayList<Artefatto> listaComandati) {
         this.listaComandati = listaComandati;
     }
 
-    /**Fornisce il nome dell' attuale modalit&agrave; operativa({@link #modalitaAttuale}) esibita dall'attuatore
+    /**
+     * Fornisce il nome dell' attuale modalit&agrave; operativa({@link #modalitaAttuale}) esibita dall'attuatore
+     *
      * @return nome della modalita operativa attuale
      */
     public String getModalitaAttuale() {
         return modalitaAttuale;
     }
 
-    /** Specifica una nuova modalit&agrave; operativa per l'attuatore controllando prima
+    /**
+     * Specifica una nuova modalit&agrave; operativa per l'attuatore controllando prima
      * che questa sia possibile(definita nel suo set di modalit&agrave; operative).
      * Inoltre determina un cambiamento dello stato degli stati artefatti comandati
      *
      * @param nuovaModalita nome della nuova modalit&agrave; operativa
      */
     public void setModalitaAttuale(String nuovaModalita) {
-        if(this.modalitaAttuale.equals(nuovaModalita)) {
+        if (this.modalitaAttuale.equals(nuovaModalita)) {
             System.out.println("*** Sei già in questa modalità ***");
             return;
         }
@@ -134,9 +153,8 @@ public class Attuatore {
         }
 
         for (ModalitaOperativa mod : this.getCategoria().getModalita()) {
-            if(mod.getValore().equals(nuovaModalita)) {
+            if (mod.getValore().equals(nuovaModalita)) {
                 this.modalitaAttuale = nuovaModalita;
-
 
 
                 modificaArtefatti(new ModalitaOperativa(nuovaModalita)); //conseguente cambiamento di stato degli artefatti comandati
@@ -148,25 +166,26 @@ public class Attuatore {
         System.out.println("!!! Questa modalità non esiste per questo attuatore !!!");
     }
 
-    /** Specifica una nuova modalit&agrave; operativa per l'attuatore controllando prima
+    /**
+     * Specifica una nuova modalit&agrave; operativa per l'attuatore controllando prima
      * che questa sia possibile(definita nel suo set di modalit&agrave; operative).
      * Inoltre determina un cambiamento dello stato degli stati artefatti comandati
      *
-     * @param nuovaModalita nome della nuova modalit&agrave; operativa
-     * @param nomeParametro nome del nuovo paramentro da settare
+     * @param nuovaModalita   nome della nuova modalit&agrave; operativa
+     * @param nomeParametro   nome del nuovo paramentro da settare
      * @param valoreParametro setta il nuovo valore della modalità paramentrica inserita
      */
     public void setModalitaAttuale(String nuovaModalita, String nomeParametro, int valoreParametro) {
-        if(this.modalitaAttuale.equals(nuovaModalita)) {
+        if (this.modalitaAttuale.equals(nuovaModalita)) {
             System.out.println("Sei già in questa modalità");
         }
 
-        if(this.listaComandati.isEmpty()) {
+        if (this.listaComandati.isEmpty()) {
             System.out.println("--- L'attuatore non comanda alcun artefatto! ---");
         }
 
         for (ModalitaOperativa mod : this.getCategoria().getModalita()) {
-            if(mod.getValore().equals(nuovaModalita)) {
+            if (mod.getValore().equals(nuovaModalita)) {
                 this.modalitaAttuale = nuovaModalita;
 
                 try {
@@ -184,31 +203,40 @@ public class Attuatore {
         System.out.println("Questa modalità non esiste per questo attuatore");
     }
 
-    /** Modifica la modalit&agrave; operatica/stato degli artefatti comandati dall'attuatore
+    /**
+     * Modifica la modalit&agrave; operatica/stato degli artefatti comandati dall'attuatore
      * @param mod nuova modalit&agrave; operativa da assegnare agli artefatti comandati dall'attuatore
      */
-
     private void modificaArtefatti(ModalitaOperativa mod) {
 
-        for (Artefatto art: listaComandati) {
+        for (Artefatto art : listaComandati) {
             art.setStatoAttuale(mod);
         }
     }
 
-    /**Fornisce lo stato di attivazione dell'attuatore(accesso o spento)
+    /**
+     * Fornisce lo stato di attivazione dell'attuatore(accesso o spento)
+     *
      * @return true se l'attuatore è acceso e false se è spento
      */
     public boolean getStatoAttivazione() {
         return statoAttivazione;
     }
 
-    /** Permette di 'attivare' il dispositivo o specificare se è attivo o spento
+    /**
+     * Permette di 'attivare' il dispositivo o specificare se è attivo o spento
+     *
      * @param statoAttivazione nuovo stato dell'attuatore(true=Acceso, false=Spento)
      */
     public void setStatoAttivazione(boolean statoAttivazione) {
         this.statoAttivazione = statoAttivazione;
     }
 
+
+    /**
+     * Permette di conoscere se l'attuatore ha caratteristica di associazione singola
+     * @return true se puo essere associato aa solo un artefatto, false altrimenti
+     */
     public boolean isSingolo() {
         return singolo;
     }

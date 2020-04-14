@@ -98,8 +98,9 @@ public class Sensore {
     }
 
     /**
-     *
-     * Dopo l'aggiornamento dei dati, vengono settate le nuove rilevazioni acquisite.
+     *Permette di sostituire un informazione presente e rilevabile all'interno del sensore con una nuova
+     * @param info1 informazione da sostituire
+     * @param info2 nuova informazione
      */
     public void modificaRilevazione(Informazione info1, Informazione info2) {
         if (rilevazioni.contains(info1))

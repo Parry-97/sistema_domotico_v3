@@ -99,6 +99,9 @@ public class CategoriaSensore implements Serializable {
         return infoRilevabili;
     }
 
+    /**Permette di ottenere una copia delle informazioni rilevabili dalla categoria di sensori
+     * @return copia delle informazioni rilevabili
+     */
     public ArrayList<Informazione> getCopiaInfoRilevabili() {
         ArrayList<Informazione> newInfos = new ArrayList<>();
 
